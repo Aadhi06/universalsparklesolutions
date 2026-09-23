@@ -13,6 +13,19 @@ export const site = {
   primaryPhone: { label: "0402 603 869", href: "tel:+61402603869" },
 } as const;
 
+export function getSiteUrl() {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (fromEnv) {
+    try {
+      return new URL(fromEnv).origin;
+    } catch {
+      // Use the published site URL when the env value is not a valid URL.
+    }
+  }
+
+  return site.website;
+}
+
 export const navigation = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },

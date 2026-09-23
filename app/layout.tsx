@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Manrope } from "next/font/google";
 import { SiteShell } from "@/components/layout/SiteShell";
-import { site } from "@/lib/site";
+import { getSiteUrl, site } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,7 +16,7 @@ const manrope = Manrope({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? site.website;
+const siteUrl = getSiteUrl();
 
 export const viewport: Viewport = {
   width: "device-width",
