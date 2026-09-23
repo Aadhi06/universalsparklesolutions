@@ -19,10 +19,10 @@ export function Footer() {
               className="h-12 w-auto"
             />
           </div>
-          <p className="mt-5 font-display text-lg font-semibold text-white">
+          <p className="font-display mt-5 text-lg font-semibold text-white">
             {site.name}
           </p>
-          <p className="mt-3 max-w-md text-[0.98rem] leading-relaxed text-white/75">
+          <p className="mt-3 max-w-md text-[0.98rem] leading-relaxed text-white/90">
             A professional commercial cleaning and facility support company
             delivering consistent, high-quality services across different
             industries in {site.serviceArea}.
@@ -38,7 +38,7 @@ export function Footer() {
               <li key={service.href}>
                 <Link
                   href={service.href}
-                  className="inline-flex min-h-11 items-center text-[0.95rem] text-white/80 transition-colors hover:text-white"
+                  className="inline-flex min-h-11 items-center text-[0.95rem] text-white/90 transition-colors hover:text-white"
                 >
                   {service.shortTitle}
                 </Link>
@@ -47,7 +47,7 @@ export function Footer() {
             <li>
               <Link
                 href="/services"
-                className="inline-flex min-h-11 items-center text-[0.95rem] text-white/80 transition-colors hover:text-white"
+                className="inline-flex min-h-11 items-center text-[0.95rem] text-white/90 transition-colors hover:text-white"
               >
                 All services
               </Link>
@@ -64,7 +64,7 @@ export function Footer() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="inline-flex min-h-11 items-center text-[0.95rem] text-white/80 transition-colors hover:text-white"
+                  className="inline-flex min-h-11 items-center text-[0.95rem] text-white/90 transition-colors hover:text-white"
                 >
                   {item.label}
                 </Link>
@@ -83,7 +83,7 @@ export function Footer() {
                 <PhoneLink
                   href={phone.href}
                   label={phone.label}
-                  className="inline-flex min-h-11 items-center gap-2 text-white/85 hover:text-white"
+                  className="inline-flex min-h-11 items-center gap-2 text-white hover:text-gold"
                 >
                   <Phone className="size-4 text-gold" aria-hidden />
                   {phone.label}
@@ -95,7 +95,7 @@ export function Footer() {
                 href={site.whatsapp.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 text-white/85 hover:text-white"
+                className="inline-flex min-h-11 items-center gap-2 text-white hover:text-gold"
               >
                 WhatsApp {site.whatsapp.numberLabel}
               </a>
@@ -103,13 +103,13 @@ export function Footer() {
             <li>
               <a
                 href={`mailto:${site.email}`}
-                className="inline-flex min-h-11 items-start gap-2 text-white/85 hover:text-white"
+                className="inline-flex min-h-11 items-start gap-2 text-white hover:text-gold"
               >
                 <Mail className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
                 <span className="break-all">{site.email}</span>
               </a>
             </li>
-            <li className="flex items-start gap-2 text-white/75">
+            <li className="flex items-start gap-2 text-white/90">
               <MapPin className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
               {site.serviceArea}
             </li>
@@ -118,7 +118,7 @@ export function Footer() {
       </Container>
 
       <div className="border-t border-white/10">
-        <Container className="flex flex-col gap-3 py-5 text-[0.82rem] text-white/60 sm:flex-row sm:items-center sm:justify-between">
+        <Container className="flex flex-col gap-3 py-5 text-[0.82rem] text-white/80 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>

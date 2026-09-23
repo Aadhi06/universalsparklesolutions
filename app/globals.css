@@ -125,14 +125,21 @@ body[data-menu-open="true"] .whatsapp-fab {
   }
 }
 
-h1,
-h2,
-h3,
-h4,
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-manrope), var(--font-inter), ui-sans-serif,
+      system-ui, sans-serif;
+    color: var(--navy);
+    letter-spacing: -0.03em;
+  }
+}
+
 .font-display {
   font-family: var(--font-manrope), var(--font-inter), ui-sans-serif, system-ui,
     sans-serif;
-  color: var(--navy);
   letter-spacing: -0.03em;
 }
 
