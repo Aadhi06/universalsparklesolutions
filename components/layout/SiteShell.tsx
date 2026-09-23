@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { MobileStickyActions } from "@/components/layout/MobileStickyActions";
 import { SkipLink } from "@/components/layout/SkipLink";
+import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       </main>
       <Footer />
       <MobileStickyActions />
+      <WhatsAppButton />
     </>
   );
 }

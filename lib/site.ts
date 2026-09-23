@@ -11,6 +11,11 @@ export const site = {
     { label: "0433 708 709", href: "tel:+61433708709", tracking: "0433" },
   ],
   primaryPhone: { label: "0402 603 869", href: "tel:+61402603869" },
+  whatsapp: {
+    href: "https://wa.me/61402603869?text=Hello%2C%20I%20would%20like%20to%20discuss%20cleaning%20for%20my%20premises.",
+    label: "Chat on WhatsApp",
+    numberLabel: "0402 603 869",
+  },
 } as const;
 
 export function getSiteUrl() {
@@ -65,6 +70,16 @@ export const services = [
     image: "/images/service-commercial.jpg",
     imageAlt:
       "A bright, recently cleaned commercial office corridor with glass-fronted rooms and a polished floor.",
+    galleryImage: "/images/env-office.jpg",
+    galleryImageAlt:
+      "A clean commercial office corridor with glass partitions and a polished floor.",
+    includes: [
+      "Workstations, meeting rooms and reception areas",
+      "Kitchens, tea points and staff amenities",
+      "Washrooms and high-touch surfaces",
+      "Warehouse floors and shared circulation spaces",
+      "Schedules planned around your operating hours",
+    ],
   },
   {
     slug: "medical-healthcare-cleaning",
@@ -78,6 +93,16 @@ export const services = [
     image: "/images/service-healthcare.jpg",
     imageAlt:
       "A clean, unused medical treatment room with an examination table and clinical lighting.",
+    galleryImage: "/images/env-clinic.jpg",
+    galleryImageAlt:
+      "A clean healthcare reception desk and waiting corridor ready for patients.",
+    includes: [
+      "Consulting rooms, treatment rooms and waiting areas",
+      "Reception, staff amenities, kitchens and washrooms",
+      "High-touch surface cleaning",
+      "Waste removal and routine floor care",
+      "Quality checks where the work requires reporting",
+    ],
   },
   {
     slug: "education-facility-cleaning",
@@ -91,6 +116,16 @@ export const services = [
     image: "/images/service-education.jpg",
     imageAlt:
       "An empty classroom with neatly arranged desks, a clean floor and a chalkboard at the front.",
+    galleryImage: "/images/env-school.jpg",
+    galleryImageAlt:
+      "A classroom ready for the next day of teaching, with desks and a clean shared learning space.",
+    includes: [
+      "Classrooms, staff rooms and shared learning spaces",
+      "Amenities, kitchens and high-traffic corridors",
+      "Childcare and school common areas",
+      "Routine waste removal and floor care",
+      "A practical scope agreed around the school day",
+    ],
   },
   {
     slug: "construction-builders-cleaning",
@@ -104,6 +139,50 @@ export const services = [
     image: "/images/service-builders.jpg",
     imageAlt:
       "A completed modern home interior with clean floors, joinery and living areas ready for handover.",
+    galleryImage: "/images/builders-exterior.jpg",
+    galleryImageAlt:
+      "A completed contemporary home exterior, representing builders cleaning before handover.",
+    includes: [
+      "Detailed dust removal from completed interiors",
+      "Floors, joinery, glass and fittings",
+      "Kitchens, bathrooms and living areas",
+      "Presentation-ready clean before inspection",
+      "Scope matched to the stage of the build",
+    ],
+  },
+] as const;
+
+export const environments = [
+  {
+    title: "Offices",
+    image: "/images/env-office.jpg",
+    imageAlt:
+      "A clean commercial office corridor with glass meeting rooms and a polished floor.",
+  },
+  {
+    title: "Staff kitchens",
+    image: "/images/env-kitchen.jpg",
+    imageAlt: "A bright, clean kitchen with a marble bench and white cabinetry.",
+  },
+  {
+    title: "Amenities",
+    image: "/images/env-amenities.jpg",
+    imageAlt: "A clean bathroom with a glass shower, vanity and tiled walls.",
+  },
+  {
+    title: "Healthcare",
+    image: "/images/env-clinic.jpg",
+    imageAlt: "A clean clinic reception desk and healthcare corridor.",
+  },
+  {
+    title: "Warehouses",
+    image: "/images/warehouse.jpg",
+    imageAlt: "A warehouse interior with racking and a clear, maintained floor.",
+  },
+  {
+    title: "Completed builds",
+    image: "/images/builders-exterior.jpg",
+    imageAlt: "A completed contemporary home ready for occupancy inspection.",
   },
 ] as const;
 
@@ -123,6 +202,25 @@ export const standards = [
   {
     title: "Quality Inspections",
     text: "Checks and reporting so the agreed standard is maintained.",
+  },
+] as const;
+
+export const typicalScope = [
+  {
+    title: "Floors and circulation",
+    text: "Vacuuming, mopping and attention to entries, corridors and shared walkways.",
+  },
+  {
+    title: "Work areas",
+    text: "Desks, meeting rooms, reception and other occupied spaces agreed in the plan.",
+  },
+  {
+    title: "Kitchens and amenities",
+    text: "Benches, sinks, appliances in staff kitchens, washrooms and high-touch fittings.",
+  },
+  {
+    title: "Waste and presentation",
+    text: "Waste removal and a consistent finish so the premises is ready for the next day.",
   },
 ] as const;
 
@@ -162,6 +260,8 @@ export type Project = {
   summary: string;
   published: boolean;
   isNamedClient: boolean;
+  image: string;
+  imageAlt: string;
 };
 
 export const projects: Project[] = [
@@ -173,6 +273,9 @@ export const projects: Project[] = [
       "Daily cleaning of consulting rooms, reception and waiting areas, treatment rooms, staff amenities, kitchens and washrooms. The scope includes vacuuming, mopping, waste removal, high-touch surface disinfection, infection-control cleaning, quality inspections and reporting.",
     published: true,
     isNamedClient: true,
+    image: "/images/service-healthcare.jpg",
+    imageAlt:
+      "A clean medical treatment room representing healthcare cleaning environments.",
   },
   {
     id: "rosso-cafe-restaurant",
@@ -182,6 +285,9 @@ export const projects: Project[] = [
       "Machine floor scrubbing and detailed window cleaning for a hospitality setting.",
     published: true,
     isNamedClient: true,
+    image: "/images/env-kitchen.jpg",
+    imageAlt:
+      "A clean kitchen and hospitality-style interior representing cafe and restaurant environments.",
   },
   {
     id: "ndis-homes",
@@ -191,6 +297,9 @@ export const projects: Project[] = [
       "Routine general home cleaning in NDIS homes. This is a service category, not a single named client.",
     published: true,
     isNamedClient: false,
+    image: "/images/env-amenities.jpg",
+    imageAlt:
+      "A clean bathroom representing routine home cleaning in residential settings.",
   },
   {
     id: "carlton-homes",
@@ -200,6 +309,9 @@ export const projects: Project[] = [
       "Detailed builders cleaning before occupancy inspection and handover. Cleaning prepares the property for inspection; it does not itself grant an occupancy permit.",
     published: true,
     isNamedClient: true,
+    image: "/images/service-builders.jpg",
+    imageAlt:
+      "A completed home interior representing builders cleaning before handover.",
   },
 ];
 
@@ -233,6 +345,16 @@ export const faqs = [
     question: "How is the cleaning scope agreed?",
     answer:
       "We agree the areas, tasks and frequency before work starts. Some sites need an assessment so access, products and any specialist requirements can be discussed. If your premises has particular scheduling or compliance needs, talk these through with the team.",
+  },
+  {
+    question: "Can I contact you on WhatsApp?",
+    answer:
+      "Yes. Message 0402 603 869 on WhatsApp to discuss your premises, or use the quote form if you prefer email. A message is a request for contact, not a confirmed booking.",
+  },
+  {
+    question: "What information helps you quote?",
+    answer:
+      "The premises type, suburb or postcode, the areas that need cleaning, and how often you need the service. Photos of the site are optional and help us understand the requirement.",
   },
 ] as const;
 

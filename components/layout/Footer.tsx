@@ -92,6 +92,16 @@ export function Footer() {
             ))}
             <li>
               <a
+                href={site.whatsapp.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 text-white/85 hover:text-white"
+              >
+                WhatsApp {site.whatsapp.numberLabel}
+              </a>
+            </li>
+            <li>
+              <a
                 href={`mailto:${site.email}`}
                 className="inline-flex min-h-11 items-start gap-2 text-white/85 hover:text-white"
               >

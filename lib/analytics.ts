@@ -38,3 +38,7 @@ export function trackPhoneClick(numberLabel: string) {
 export function trackQuoteSubmitted() {
   trackEvent("quote_submitted", { form: "quote_request" });
 }
+
+export function trackWhatsAppClick() {
+  trackEvent("whatsapp_click", { channel: "whatsapp" });
+}

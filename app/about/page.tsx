@@ -3,7 +3,8 @@ import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { aboutPoints, site } from "@/lib/site";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { aboutPoints, environments, processSteps, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -58,6 +59,83 @@ export default function AboutPage() {
               Request a Free Quote
             </ButtonLink>
           </div>
+        </Container>
+      </section>
+
+      <section className="bg-surface py-12 lg:py-20">
+        <Container className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[6px] lg:order-2">
+            <Image
+              src="/images/about-working.jpg"
+              alt="A cleaner using a pole tool on full-height windows in a bright, modern interior."
+              fill
+              className="object-cover object-[50%_20%]"
+              sizes="(max-width: 1024px) 100vw, 600px"
+            />
+          </div>
+          <div>
+            <h2 className="font-display text-[1.65rem] font-semibold text-navy sm:text-2xl">
+              People, equipment and products
+            </h2>
+            <p className="mt-4 leading-relaxed text-body">
+              Each site is treated as its own environment. The team works with
+              experienced staff, modern equipment and environmentally
+              responsible products selected for the task.
+            </p>
+            <p className="mt-4 leading-relaxed text-body">
+              Quality checks are part of the work, not an afterthought. Where
+              a contract needs inspections or reporting, that is agreed before
+              cleaning starts.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-white py-12 lg:py-20">
+        <Container>
+          <SectionHeading
+            title="Premises we support"
+            intro={`From offices and warehouses to clinics, schools and completed builds across ${site.serviceArea}.`}
+          />
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+            {environments.map((item) => (
+              <figure key={item.title}>
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[6px] bg-surface">
+                  <Image
+                    src={item.image}
+                    alt={item.imageAlt}
+                    fill
+                    sizes="(max-width: 1024px) 50vw, 400px"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="mt-2.5 font-medium text-navy">
+                  {item.title}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-surface py-12 lg:py-20">
+        <Container>
+          <SectionHeading title="From first enquiry to quality checks" />
+          <ol className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {processSteps.map((step) => (
+              <li key={step.number}>
+                <p className="font-display text-[2rem] font-semibold text-gold">
+                  {step.number}
+                </p>
+                <h3 className="font-display mt-3 text-[1.15rem] font-semibold text-navy">
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-[0.98rem] leading-relaxed text-body">
+                  {step.text}
+                </p>
+              </li>
+            ))}
+          </ol>
         </Container>
       </section>
     </>

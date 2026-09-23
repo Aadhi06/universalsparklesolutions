@@ -54,7 +54,18 @@ export default async function ServicePage({ params }: ServicePageProps) {
           </div>
           <div>
             <p className="leading-relaxed text-body">{service.description}</p>
-            <p className="mt-4 leading-relaxed text-body">
+            <h2 className="font-display mt-8 text-xl font-semibold text-navy">
+              What this service can include
+            </h2>
+            <ul className="mt-4 space-y-2.5">
+              {service.includes.map((item) => (
+                <li key={item} className="flex gap-3 text-body">
+                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-gold" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 leading-relaxed text-body">
               Tell us about the premises, suburb or postcode, and the frequency
               you have in mind. We will contact you to discuss the scope. A
               quote request is not a confirmed booking.
@@ -67,6 +78,29 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 View all services
               </ButtonLink>
             </div>
+          </div>
+        </Container>
+      </section>
+      <section className="bg-surface py-12 sm:py-16">
+        <Container className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="relative aspect-[16/11] overflow-hidden rounded-[6px]">
+            <Image
+              src={service.galleryImage}
+              alt={service.galleryImageAlt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 600px"
+            />
+          </div>
+          <div>
+            <h2 className="font-display text-[1.65rem] font-semibold text-navy">
+              Talk through your site
+            </h2>
+            <p className="mt-4 leading-relaxed text-body">
+              Every premises is different. Share the areas that matter, the
+              hours the building is used, and any access or product
+              requirements. We will reply to discuss the work.
+            </p>
           </div>
         </Container>
       </section>
