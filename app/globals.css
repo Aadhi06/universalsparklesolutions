@@ -1,26 +1,122 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy: #102342;
+  --navy-deep: #0b1a30;
+  --blue: #146dad;
+  --blue-dark: #0f5a8f;
+  --sky: #42b6df;
+  --gold: #d6b66e;
+  --gold-deep: #b8954a;
+  --white: #ffffff;
+  --surface: #f4f8fc;
+  --body: #334155;
+  --muted: #4b5b6b;
+  --line: #d7e2ec;
+  --focus: #146dad;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-blue: var(--blue);
+  --color-blue-dark: var(--blue-dark);
+  --color-sky: var(--sky);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-surface: var(--surface);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-manrope);
+  --shadow-soft: 0 1px 2px rgb(16 35 66 / 0.05), 0 10px 28px rgb(16 35 66 / 0.06);
+  --radius-sm: 6px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--white);
+  color: var(--body);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  overflow-x: clip;
+  touch-action: manipulation;
+}
+
+@media (min-width: 640px) {
+  body {
+    font-size: 1.0625rem;
+  }
+}
+
+body[data-menu-open="true"] .mobile-sticky-actions,
+body:has(input:focus, textarea:focus, select:focus) .mobile-sticky-actions {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .header-quote-cta {
+    display: none !important;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-manrope), var(--font-inter), ui-sans-serif, system-ui,
+    sans-serif;
+  color: var(--navy);
+  letter-spacing: -0.03em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgb(20 109 173 / 0.16);
+  color: var(--navy);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 80;
+  border-radius: 6px;
+  background: var(--navy);
+  color: white;
+  padding: 0.75rem 1rem;
+}
+
+.skip-link:focus {
+  top: 1rem;
 }
