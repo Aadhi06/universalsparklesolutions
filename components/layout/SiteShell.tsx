@@ -11,7 +11,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <SkipLink />
       <ContactStrip />
       <Header />
-      <main id="main-content" className="flex-1" tabIndex={-1}>
+      <main id="main-content" className="flex-1 overflow-x-clip" tabIndex={-1}>
         {children}
       </main>
       <Footer />
