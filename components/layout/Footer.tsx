@@ -122,6 +122,16 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
+          <p>
+            <a
+              href="https://avenque.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center text-white/90 transition-colors hover:text-gold"
+            >
+              Web Designed &amp; Developed By Avenque Ltd
+            </a>
+          </p>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             <Link href="/privacy-policy" className="inline-flex min-h-11 items-center hover:text-white">
               Privacy Policy

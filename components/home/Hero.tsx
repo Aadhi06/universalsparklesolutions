@@ -10,21 +10,19 @@ export function Hero() {
           <p className="text-[0.72rem] font-semibold tracking-[0.14em] text-blue uppercase sm:text-[0.78rem] sm:tracking-[0.2em]">
             Cleaning & Facility Support
           </p>
-          <h1 className="font-display mt-3 text-[1.7rem] leading-[1.15] font-semibold text-pretty text-navy sm:mt-4 sm:text-[2.85rem] lg:text-[3.25rem]">
-            Professional Cleaning.
-            <span className="block">Consistent Standards.</span>
-            <span className="block">Every Visit.</span>
+          <h1 className="font-display mt-3 text-[1.7rem] leading-[1.15] font-semibold text-pretty text-navy sm:mt-4 sm:text-[2.65rem] lg:text-[3.1rem]">
+            Commercial Cleaning in Melbourne & Regional Victoria
           </h1>
-          <p className="mt-4 max-w-xl text-[1rem] leading-relaxed text-body sm:mt-6 sm:text-[1.08rem]">
-            Commercial, healthcare, education and builders cleaning across
-            Melbourne Metropolitan Area and Regional Victoria.
+          <p className="mt-4 max-w-xl text-[1rem] leading-relaxed text-body sm:mt-5 sm:text-[1.08rem]">
+            Offices, clinics, schools and completed builds — cleaned to a
+            consistent standard, every visit.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
             <ButtonLink href="/contact#quote" className="w-full sm:w-auto">
               Request a Free Quote
             </ButtonLink>
             <ButtonLink href="#services" variant="secondary" className="w-full sm:w-auto">
-              Explore Our Services
+              View Cleaning Services
             </ButtonLink>
           </div>
         </div>

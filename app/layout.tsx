@@ -27,7 +27,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${site.shortName} | Commercial Cleaning Melbourne & Regional Victoria`,
+    default: `Commercial Cleaning Melbourne | ${site.shortName}`,
     template: `%s | ${site.shortName}`,
   },
   description:

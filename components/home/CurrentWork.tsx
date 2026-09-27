@@ -9,44 +9,33 @@ export function CurrentWork() {
   return (
     <section
       id="current-work"
-      className="scroll-mt-24 bg-white py-12 sm:py-20 lg:py-24"
+      className="scroll-mt-24 bg-white py-12 sm:py-16 lg:py-20"
     >
       <Container>
-        <SectionHeading
-          title="Experience Across Different Environments"
-          intro="A selection of current work. Named client references are shown only where publication has been approved."
-        />
+        <SectionHeading title="Current Cleaning Work in Victoria" />
 
-        <div className="mt-8 grid gap-8 sm:mt-12 md:grid-cols-2">
-          {visible.map((project, index) => (
-            <article key={project.id} className="border-b border-line pb-8">
+        <div className="mt-8 grid gap-6 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
+          {visible.map((project) => (
+            <article key={project.id}>
               <div className="relative aspect-[16/10] overflow-hidden rounded-[6px] bg-surface">
                 <Image
                   src={project.image}
                   alt={project.imageAlt}
                   fill
-                  sizes="(max-width: 768px) 100vw, 580px"
+                  sizes="(max-width: 768px) 100vw, 280px"
                   className="object-cover"
                 />
               </div>
-              <p className="font-display mt-5 text-lg font-semibold text-gold">
-                {String(index + 1).padStart(2, "0")}
-              </p>
-              <p className="mt-1 text-[0.75rem] font-semibold tracking-[0.14em] text-blue uppercase">
+              <p className="mt-3 text-[0.72rem] font-semibold tracking-[0.14em] text-blue uppercase">
                 {project.category}
               </p>
-              <h3 className="font-display mt-2 text-[1.25rem] font-semibold text-navy">
+              <h3 className="font-display mt-1 text-[1.1rem] font-semibold text-navy">
                 {project.title}
               </h3>
-              <p className="mt-3 leading-relaxed text-body">{project.summary}</p>
+              <p className="mt-1 text-[0.95rem] text-body">{project.homeLine}</p>
             </article>
           ))}
         </div>
-
-        <p className="mt-6 text-[0.9rem] text-muted">
-          Photographs on this page are representative of the environments we
-          clean. They are not images of these contracts.
-        </p>
       </Container>
     </section>
   );

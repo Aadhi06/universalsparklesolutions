@@ -10,12 +10,11 @@ export function Quote() {
       <Container className="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
         <div className="rounded-[6px] bg-navy px-5 py-7 text-white sm:px-8 sm:py-10">
           <h2 className="font-display text-[1.65rem] leading-[1.2] font-semibold text-pretty text-white sm:text-[2.2rem]">
-            Tell Us About Your Cleaning Requirements
+            Request a Free Cleaning Quote
           </h2>
           <p className="mt-4 leading-relaxed text-white/80">
-            Share a little about the premises and the service you need. We
-            will contact you to discuss the scope. A quote request is not an
-            automatic booking.
+            Tell us the premises and the service you need. We will contact you
+            to discuss scope. A request is not a booking.
           </p>
           <ul className="mt-8 space-y-4 text-[0.98rem]">
             {site.phones.map((phone) => (

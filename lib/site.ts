@@ -63,6 +63,7 @@ export const services = [
     title: "Commercial Cleaning",
     shortTitle: "Commercial Cleaning",
     href: "/services/commercial-cleaning",
+    homeLine: "Offices and warehouses, on your schedule.",
     summary:
       "Scheduled cleaning for offices and warehouses, planned around your operating hours and the way each workplace is used.",
     description:
@@ -86,6 +87,7 @@ export const services = [
     title: "Medical & Healthcare Cleaning",
     shortTitle: "Medical & Healthcare",
     href: "/services/medical-healthcare-cleaning",
+    homeLine: "Clinics and allied health centres.",
     summary:
       "Methodical cleaning for medical clinics and allied health centres, including high-touch surfaces and clinical support areas.",
     description:
@@ -109,6 +111,7 @@ export const services = [
     title: "Education Facility Cleaning",
     shortTitle: "Schools & Childcare",
     href: "/services/education-facility-cleaning",
+    homeLine: "Schools and childcare centres.",
     summary:
       "Cleaning for schools and childcare centres, with attention to classrooms, amenities and shared learning spaces.",
     description:
@@ -132,6 +135,7 @@ export const services = [
     title: "Construction & Builders Cleaning",
     shortTitle: "Construction & Builders",
     href: "/services/construction-builders-cleaning",
+    homeLine: "Final clean before inspection and handover.",
     summary:
       "Detailed final cleaning of completed properties before occupancy inspection and handover.",
     description:
@@ -257,6 +261,7 @@ export type Project = {
   id: string;
   title: string;
   category: string;
+  homeLine: string;
   summary: string;
   published: boolean;
   isNamedClient: boolean;
@@ -269,6 +274,7 @@ export const projects: Project[] = [
     id: "westgate-medical-centre",
     title: "Westgate Medical Centre",
     category: "Healthcare",
+    homeLine: "Daily clinic, reception and amenities cleaning.",
     summary:
       "Daily cleaning of consulting rooms, reception and waiting areas, treatment rooms, staff amenities, kitchens and washrooms. The scope includes vacuuming, mopping, waste removal, high-touch surface disinfection, infection-control cleaning, quality inspections and reporting.",
     published: true,
@@ -281,6 +287,7 @@ export const projects: Project[] = [
     id: "rosso-cafe-restaurant",
     title: "Rosso Cafe & Restaurant",
     category: "Hospitality",
+    homeLine: "Floor scrubbing and window cleaning.",
     summary:
       "Machine floor scrubbing and detailed window cleaning for a hospitality setting.",
     published: true,
@@ -293,6 +300,7 @@ export const projects: Project[] = [
     id: "ndis-homes",
     title: "NDIS Homes",
     category: "Residential support",
+    homeLine: "Routine home cleaning in NDIS homes.",
     summary:
       "Routine general home cleaning in NDIS homes. This is a service category, not a single named client.",
     published: true,
@@ -305,6 +313,7 @@ export const projects: Project[] = [
     id: "carlton-homes",
     title: "Carlton Homes",
     category: "Builders cleaning",
+    homeLine: "Builders clean before occupancy inspection.",
     summary:
       "Detailed builders cleaning before occupancy inspection and handover. Cleaning prepares the property for inspection; it does not itself grant an occupancy permit.",
     published: true,
