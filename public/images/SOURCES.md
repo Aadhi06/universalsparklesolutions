@@ -20,6 +20,14 @@ All homepage photographs below are licensed stock images stored locally. They ar
 | `env-clinic.jpg` | Healthcare reception | [Unsplash — Martha Dominguez de Gouveia, photo-1519494026892-80bbd2d6fd0d](https://unsplash.com/photos/white-and-blue-hospital-reception-nMyM7fxpokE) | Unsplash License |
 | `env-school.jpg` | Classroom in use | [Unsplash — NeONBRAND, photo-1509062522246-3755977927d7](https://unsplash.com/photos/children-sitting-on-chairs-inside-classroom-8eTn8LqxNbk) | Unsplash License |
 | `env-cleaning.jpg` | Person cleaning a window | [Unsplash — CDC, photo-1581578731548-c64695cc6952](https://unsplash.com/photos/woman-in-white-long-sleeve-shirt-standing-beside-white-wooden-door-5sYQ1VKhzw4) | Unsplash License |
+| `service-residential.jpg` | Bright living room | [Unsplash — photo-1600210492486-724fe5c67fb0](https://unsplash.com/photos/a-living-room-with-a-couch-and-a-coffee-table-in-it-iWhtG2hPB_0) | Unsplash License |
+| `service-end-of-lease.jpg` | Unoccupied apartment | [Unsplash — photo-1502672260266-1c1ef2d93688](https://unsplash.com/photos/white-wooden-cabinet-beside-bed-Xvo36vZsOVs) | Unsplash License |
+| `service-carpet.jpg` | Living room rug | [Unsplash — photo-1600121848594-d8644e57abab](https://unsplash.com/photos/white-and-brown-living-room-set-MAnVoPQjRmk) | Unsplash License |
+| `service-furniture.jpg` | Fabric sofa | [Unsplash — photo-1555041469-a586c61ea9bc](https://unsplash.com/photos/white-sofa-set-near-window-YlAIEh8A1Ms) | Unsplash License |
+| `service-childcare-centre.jpg` | Early learning room during story time | [Pexels — 8613089](https://www.pexels.com/photo/8613089/) | Pexels License |
+| `service-last-minute.jpg` | Person cleaning a window | Same source as `env-cleaning.jpg` | Unsplash License |
+| `service-glass.jpg` | Bedroom with full-height glass | [Unsplash — photo-1600607687644-c7171b42498f](https://unsplash.com/photos/c7171b42498f) | Unsplash License |
+| `service-ceiling.jpg` | High-walled living room | [Unsplash — photo-1618221195710-dd6b41faaea6](https://unsplash.com/photos/dd6b41faaea6) | Unsplash License |
 
 ## Missing assets still needed
 

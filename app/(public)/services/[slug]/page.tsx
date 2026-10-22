@@ -97,9 +97,9 @@ export default async function ServicePage({ params }: ServicePageProps) {
               Talk through your site
             </h2>
             <p className="mt-4 leading-relaxed text-body">
-              Every premises is different. Share the areas that matter, the
-              hours the building is used, and any access or product
-              requirements. We will reply to discuss the work.
+              Every premises is different. Share the rooms that matter, when
+              the site can be accessed, and any product or height requirements.
+              We will reply to discuss the work.
             </p>
           </div>
         </Container>

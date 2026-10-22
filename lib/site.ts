@@ -34,28 +34,30 @@ export function getSiteUrl() {
 export const navigation = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
-  {
-    href: "/services",
-    label: "Services",
-    children: [
-      { href: "/services/commercial-cleaning", label: "Commercial Cleaning" },
-      {
-        href: "/services/medical-healthcare-cleaning",
-        label: "Medical & Healthcare Cleaning",
-      },
-      {
-        href: "/services/education-facility-cleaning",
-        label: "Education Facility Cleaning",
-      },
-      {
-        href: "/services/construction-builders-cleaning",
-        label: "Construction & Builders Cleaning",
-      },
-    ],
-  },
+  { href: "/services", label: "Services", hasServiceMenu: true },
   { href: "/#current-work", label: "Our Work" },
   { href: "/contact", label: "Contact" },
 ] as const;
+
+export const serviceGroups = [
+  {
+    id: "workplaces",
+    title: "Workplaces & facilities",
+    intro: "Offices, clinics, schools and completed builds.",
+  },
+  {
+    id: "homes",
+    title: "Homes",
+    intro: "House cleaning and end of lease presentation.",
+  },
+  {
+    id: "specialist",
+    title: "Specialist cleaning",
+    intro: "Carpet, furniture, glass, ceilings, childcare and urgent work.",
+  },
+] as const;
+
+export type ServiceGroupId = (typeof serviceGroups)[number]["id"];
 
 export const services = [
   {
@@ -63,6 +65,8 @@ export const services = [
     title: "Commercial Cleaning",
     shortTitle: "Commercial Cleaning",
     href: "/services/commercial-cleaning",
+    group: "workplaces",
+    featured: true,
     homeLine: "Offices and warehouses, on your schedule.",
     summary:
       "Scheduled cleaning for offices and warehouses, planned around your operating hours and the way each workplace is used.",
@@ -87,6 +91,8 @@ export const services = [
     title: "Medical & Healthcare Cleaning",
     shortTitle: "Medical & Healthcare",
     href: "/services/medical-healthcare-cleaning",
+    group: "workplaces",
+    featured: true,
     homeLine: "Clinics and allied health centres.",
     summary:
       "Methodical cleaning for medical clinics and allied health centres, including high-touch surfaces and clinical support areas.",
@@ -109,13 +115,15 @@ export const services = [
   {
     slug: "education-facility-cleaning",
     title: "Education Facility Cleaning",
-    shortTitle: "Schools & Childcare",
+    shortTitle: "Schools",
     href: "/services/education-facility-cleaning",
-    homeLine: "Schools and childcare centres.",
+    group: "workplaces",
+    featured: true,
+    homeLine: "Schools and learning facilities.",
     summary:
-      "Cleaning for schools and childcare centres, with attention to classrooms, amenities and shared learning spaces.",
+      "Cleaning for schools, with attention to classrooms, amenities and shared learning spaces.",
     description:
-      "Education facilities need a reliable clean that keeps classrooms, amenities and shared areas ready for the next day. We work with schools and childcare centres to agree a practical scope.",
+      "Education facilities need a reliable clean that keeps classrooms, amenities and shared areas ready for the next day. We work with schools to agree a practical scope around the school day.",
     image: "/images/service-education.jpg",
     imageAlt:
       "An empty classroom with neatly arranged desks, a clean floor and a chalkboard at the front.",
@@ -125,7 +133,7 @@ export const services = [
     includes: [
       "Classrooms, staff rooms and shared learning spaces",
       "Amenities, kitchens and high-traffic corridors",
-      "Childcare and school common areas",
+      "School common areas and high-traffic corridors",
       "Routine waste removal and floor care",
       "A practical scope agreed around the school day",
     ],
@@ -135,6 +143,8 @@ export const services = [
     title: "Construction & Builders Cleaning",
     shortTitle: "Construction & Builders",
     href: "/services/construction-builders-cleaning",
+    group: "workplaces",
+    featured: true,
     homeLine: "Final clean before inspection and handover.",
     summary:
       "Detailed final cleaning of completed properties before occupancy inspection and handover.",
@@ -154,7 +164,218 @@ export const services = [
       "Scope matched to the stage of the build",
     ],
   },
+  {
+    slug: "residential-house-cleaning",
+    title: "Residential House Cleaning",
+    shortTitle: "House Cleaning",
+    href: "/services/residential-house-cleaning",
+    group: "homes",
+    featured: false,
+    homeLine: "Routine cleaning for homes across Victoria.",
+    summary:
+      "Regular or one-off house cleaning for living areas, kitchens, bathrooms and bedrooms, matched to how the home is used.",
+    description:
+      "Residential cleaning covers the rooms that matter in a home, from kitchens and bathrooms to living areas and high-touch surfaces. We agree a practical plan for ongoing visits or a one-off clean. This is a cleaning service, not a tenancy or NDIS registration claim.",
+    image: "/images/service-residential.jpg",
+    imageAlt:
+      "A bright, tidy living room with a sofa, timber floors and natural light, representing house cleaning.",
+    galleryImage: "/images/env-kitchen.jpg",
+    galleryImageAlt: "A clean kitchen with a marble bench and white cabinetry.",
+    includes: [
+      "Kitchens, bathrooms and living areas",
+      "Bedrooms, hallways and high-touch surfaces",
+      "Floors, benches and waste removal",
+      "A plan for weekly, fortnightly or one-off visits",
+      "Optional extras such as ovens, windows or carpets on request",
+    ],
+  },
+  {
+    slug: "end-of-lease-cleaning",
+    title: "End of Lease Cleaning",
+    shortTitle: "End of Lease",
+    href: "/services/end-of-lease-cleaning",
+    group: "homes",
+    featured: false,
+    homeLine: "A detailed clean before you hand the keys back.",
+    summary:
+      "Presentation-ready cleaning of a rental property before vacancy inspection. Cleaning supports handover; it does not itself guarantee a bond refund.",
+    description:
+      "End of lease cleaning focuses on the detail landlords and agents typically check: kitchens, bathrooms, floors, windows and built-in appliances. We agree the rooms and inclusions before the visit. Cleaning prepares the property for inspection. It does not replace the inspection or grant a bond refund.",
+    image: "/images/service-end-of-lease.jpg",
+    imageAlt:
+      "A clean, unoccupied apartment living area ready for vacancy inspection.",
+    galleryImage: "/images/env-amenities.jpg",
+    galleryImageAlt:
+      "A clean bathroom with a glass shower and vanity, representing end of lease presentation.",
+    includes: [
+      "Kitchens, ovens, cooktops and rangehoods as agreed",
+      "Bathrooms, toilets, showers and vanities",
+      "Floors, skirting, doors and light switches",
+      "Interior glass and window tracks where accessible",
+      "Scope confirmed before the keys are handed over",
+    ],
+  },
+  {
+    slug: "carpet-rug-cleaning",
+    title: "Carpet & Rug Cleaning",
+    shortTitle: "Carpet & Rugs",
+    href: "/services/carpet-rug-cleaning",
+    group: "specialist",
+    featured: false,
+    homeLine: "Carpets and rugs cleaned in homes and workplaces.",
+    summary:
+      "Cleaning of carpets and rugs in homes, offices and other premises, with a method matched to the fibre and the soiling.",
+    description:
+      "Carpet and rug cleaning is quoted for each site. We look at the type of floor covering, access and the result you need — from a routine refresh to a more thorough clean after an event or a move. Steam furniture cleaning is listed as its own service.",
+    image: "/images/service-carpet.jpg",
+    imageAlt:
+      "A living room with a large rug and seating, representing carpet and rug cleaning.",
+    galleryImage: "/images/office-lounge.jpg",
+    galleryImageAlt:
+      "A commercial lounge with carpet and upholstered seating.",
+    includes: [
+      "Wall-to-wall carpets in homes and offices",
+      "Area rugs and high-traffic walkways",
+      "A method matched to the fibre and soiling",
+      "Drying time and access agreed before the visit",
+      "Can be booked with house, office or end of lease cleaning",
+    ],
+  },
+  {
+    slug: "steam-furniture-cleaning",
+    title: "Steam Furniture Cleaning",
+    shortTitle: "Steam Furniture",
+    href: "/services/steam-furniture-cleaning",
+    group: "specialist",
+    featured: false,
+    homeLine: "Sofas, chairs and fabric furniture, quoted on their own.",
+    summary:
+      "Steam cleaning for upholstered sofas, chairs and fabric furniture. This is a separate service from carpet and rug cleaning.",
+    description:
+      "Steam furniture cleaning is quoted on its own so the scope for sofas, armchairs and fabric seating is clear. We match the method to the fabric and discuss drying time before work starts. A hidden-area test can be done where the upholstery needs it. This service does not restore damaged or worn fabric.",
+    image: "/images/service-furniture.jpg",
+    imageAlt:
+      "A modern fabric sofa in a living room, representing steam furniture cleaning.",
+    galleryImage: "/images/office-lounge.jpg",
+    galleryImageAlt:
+      "Upholstered commercial seating in a lounge, representing fabric furniture cleaning.",
+    includes: [
+      "Sofas, armchairs and fabric dining chairs",
+      "Office reception and breakout seating",
+      "A method suited to the fabric type",
+      "Quoted separately from carpet and rug cleaning",
+      "Can be booked with house or commercial cleaning",
+    ],
+  },
+  {
+    slug: "child-care-cleaning",
+    title: "Child Care Cleaning",
+    shortTitle: "Child Care",
+    href: "/services/child-care-cleaning",
+    group: "specialist",
+    featured: false,
+    homeLine: "Centres cleaned around the care day.",
+    summary:
+      "Cleaning for childcare centres and early learning rooms, including play areas, amenities and high-touch surfaces.",
+    description:
+      "Childcare environments need a reliable clean that is ready for the next session. We work with centres to cover play rooms, sleep rooms, amenities, kitchens and high-touch surfaces, planned around drop-off, pick-up and rest times. This is a cleaning service for childcare premises, not a claim of government registration.",
+    image: "/images/service-childcare-centre.jpg",
+    imageAlt:
+      "A bright early learning room with children on the floor during story time, representing childcare centre cleaning.",
+    galleryImage: "/images/env-school.jpg",
+    galleryImageAlt:
+      "A classroom and shared learning space representing early learning environments.",
+    includes: [
+      "Play rooms, sleep rooms and activity areas",
+      "Amenities, nappy-change and kitchen spaces as agreed",
+      "High-touch surfaces, floors and waste removal",
+      "A schedule around the care day",
+      "Quality checks where the centre requires reporting",
+    ],
+  },
+  {
+    slug: "last-minute-cleaning",
+    title: "Last Minute Cleaning",
+    shortTitle: "Last Minute",
+    href: "/services/last-minute-cleaning",
+    group: "specialist",
+    featured: false,
+    homeLine: "Urgent cleaning when the team is available.",
+    summary:
+      "Short-notice cleaning for homes and workplaces when a visit is needed quickly. Availability is confirmed before any booking.",
+    description:
+      "Last minute cleaning is for sites that need a clean on short notice — before an inspection, an event, a handover or an unexpected visit. Call or WhatsApp the team with the suburb, premises type and timing. We confirm whether a crew can attend. A request is not a confirmed booking.",
+    image: "/images/service-last-minute.jpg",
+    imageAlt:
+      "A cleaner wiping a window, representing a short-notice cleaning visit.",
+    galleryImage: "/images/env-cleaning.jpg",
+    galleryImageAlt:
+      "Detailed finishing work during a cleaning visit.",
+    includes: [
+      "Same-day or next-day visits where a team is free",
+      "Homes, offices and other premises as agreed",
+      "A focused scope for the time available",
+      "Confirmed by phone or WhatsApp before we attend",
+      "Can include glass, bathrooms, kitchens or a full tidy",
+    ],
+  },
+  {
+    slug: "glass-cleaning",
+    title: "Glass Cleaning",
+    shortTitle: "Glass Cleaning",
+    href: "/services/glass-cleaning",
+    group: "specialist",
+    featured: false,
+    homeLine: "Interior glass, partitions and accessible windows.",
+    summary:
+      "Cleaning of interior glass, partitions and accessible windows in homes, offices and completed builds.",
+    description:
+      "Glass cleaning covers interior windows, glass partitions, shopfronts and other accessible glazing. High or external work is quoted only where safe access can be arranged. We agree which panes, tracks and frames are included before the visit.",
+    image: "/images/service-glass.jpg",
+    imageAlt:
+      "A bright bedroom with full-height glass doors, representing interior glass cleaning.",
+    galleryImage: "/images/about-working.jpg",
+    galleryImageAlt:
+      "A cleaner using a pole tool on full-height interior windows.",
+    includes: [
+      "Interior windows and glass doors",
+      "Office partitions and shopfront glass as agreed",
+      "Window tracks and frames where accessible",
+      "Can be booked with house, office or builders cleaning",
+      "External or high-level work quoted only with safe access",
+    ],
+  },
+  {
+    slug: "ceiling-cleaning",
+    title: "Ceiling Cleaning",
+    shortTitle: "Ceiling Cleaning",
+    href: "/services/ceiling-cleaning",
+    group: "specialist",
+    featured: false,
+    homeLine: "Dust, cobwebs and high surfaces, done safely.",
+    summary:
+      "Cleaning of ceilings, cornices and high surfaces in homes, offices and other interiors, using access methods suited to the height.",
+    description:
+      "Ceiling cleaning removes dust, cobwebs and build-up from ceilings, cornices, vents and high corners. The method depends on ceiling height and finish. We confirm access equipment and any fragile fittings before work starts. This is interior cleaning, not a painting or restoration service.",
+    image: "/images/service-ceiling.jpg",
+    imageAlt:
+      "A living room with high walls and windows, representing ceiling and high-surface cleaning.",
+    galleryImage: "/images/env-office.jpg",
+    galleryImageAlt:
+      "A commercial interior with full-height surfaces and a clean finish.",
+    includes: [
+      "Ceilings, cornices and high corners",
+      "Cobweb removal and dusting of vents as agreed",
+      "Homes, offices and other interiors",
+      "Access method matched to the ceiling height",
+      "Can be combined with glass or builders cleaning",
+    ],
+  },
 ] as const;
+
+export function servicesByGroup(id: ServiceGroupId) {
+  return services.filter((service) => service.group === id);
+}
 
 export const environments = [
   {
@@ -193,11 +414,11 @@ export const environments = [
 export const standards = [
   {
     title: "Experienced Team",
-    text: "Cleaning staff who understand commercial and facility environments.",
+    text: "Cleaning staff who understand workplaces, facilities and homes.",
   },
   {
     title: "Modern Equipment",
-    text: "The right tools for offices, clinics, schools and completed builds.",
+    text: "The right tools for offices, clinics, schools, homes and completed builds.",
   },
   {
     title: "Responsible Products",
@@ -238,22 +459,22 @@ export const processSteps = [
   {
     number: "01",
     title: "Tell Us What You Need",
-    text: "Share your premises type, location and the cleaning outcome you are looking for.",
+    text: "Share the premises, suburb and the result you need.",
   },
   {
     number: "02",
     title: "Site Assessment Where Required",
-    text: "Some sites need a walkthrough so the scope, access and any specialist requirements are clear.",
+    text: "A walkthrough if access, rooms or specialist work need checking.",
   },
   {
     number: "03",
     title: "Agree Your Cleaning Plan",
-    text: "We confirm the areas, frequency and responsibilities before work begins.",
+    text: "We agree the areas, timing and the plan before work starts.",
   },
   {
     number: "04",
     title: "Cleaning and Quality Checks",
-    text: "The team delivers the agreed clean, with inspections and reporting where the contract requires it.",
+    text: "The team delivers the agreed clean, with checks where needed.",
   },
 ] as const;
 
@@ -333,7 +554,7 @@ export const faqs = [
   {
     question: "What types of premises do you clean?",
     answer:
-      "Our main work is commercial cleaning for offices and warehouses, medical and healthcare facilities, schools and childcare centres, and construction or builders cleaning before handover. We also provide residential cleaning, including routine cleaning in NDIS homes.",
+      "We clean workplaces, homes and specialist interiors. That includes offices, clinics, schools, childcare centres, completed builds, house cleaning, end of lease, carpets, steam furniture, glass, ceilings and last-minute visits. Routine cleaning in NDIS homes is available as a residential service.",
   },
   {
     question: "How do I request a quote?",
@@ -376,11 +597,7 @@ export const quoteFrequencies = [
 ] as const;
 
 export const quoteServices = [
-  "Commercial Cleaning",
-  "Medical & Healthcare Cleaning",
-  "Education Facility Cleaning",
-  "Construction & Builders Cleaning",
-  "Residential Cleaning",
+  ...services.map((service) => service.title),
   "Other / To discuss",
 ] as const;
 

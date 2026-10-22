@@ -29,6 +29,19 @@ export function trackEvent(name: string, detail: AnalyticsDetail = {}) {
     analytics_id: getAnalyticsId() || undefined,
     ...safeDetail,
   });
+
+  if (
+    name === "phone_click" ||
+    name === "whatsapp_click" ||
+    name === "quote_submitted"
+  ) {
+    void fetch("/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+      keepalive: true,
+    }).catch(() => undefined);
+  }
 }
 
 export function trackPhoneClick(numberLabel: string) {

@@ -4,12 +4,13 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { PhoneLink } from "@/components/analytics/PhoneLink";
 import { Container } from "@/components/ui/Container";
 import { navigation, services, site } from "@/lib/site";
+import type { PublicContacts } from "@/lib/store/settings";
 
-export function Footer() {
+export function Footer({ contacts = site }: { contacts?: PublicContacts }) {
   return (
     <footer className="bg-navy-deep text-white pb-[5.75rem] md:pb-0">
       <Container className="grid gap-10 py-12 md:grid-cols-12 md:gap-12 md:py-20">
-        <div className="md:col-span-5">
+        <div className="md:col-span-4">
           <div className="inline-flex items-center rounded-[6px] bg-white px-3 py-2">
             <Image
               src="/brand/logo-mark.png"
@@ -20,20 +21,19 @@ export function Footer() {
             />
           </div>
           <p className="font-display mt-5 text-lg font-semibold text-white">
-            {site.name}
+            {contacts.name}
           </p>
           <p className="mt-3 max-w-md text-[0.98rem] leading-relaxed text-white/90">
-            A professional commercial cleaning and facility support company
-            delivering consistent, high-quality services across different
-            industries in {site.serviceArea}.
+            Professional cleaning for workplaces and homes across{" "}
+            {contacts.serviceArea}.
           </p>
         </div>
 
-        <div className="md:col-span-2">
+        <div className="md:col-span-4">
           <h2 className="text-[0.78rem] font-semibold tracking-[0.16em] text-gold uppercase">
             Services
           </h2>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-4 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
             {services.map((service) => (
               <li key={service.href}>
                 <Link
@@ -47,7 +47,7 @@ export function Footer() {
             <li>
               <Link
                 href="/services"
-                className="inline-flex min-h-11 items-center text-[0.95rem] text-white/90 transition-colors hover:text-white"
+                className="inline-flex min-h-11 items-center font-semibold text-gold hover:text-white"
               >
                 All services
               </Link>
@@ -73,12 +73,12 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="md:col-span-3">
+        <div className="md:col-span-2">
           <h2 className="text-[0.78rem] font-semibold tracking-[0.16em] text-gold uppercase">
             Contact
           </h2>
           <ul className="mt-4 space-y-3 text-[0.95rem]">
-            {site.phones.map((phone) => (
+            {contacts.phones.map((phone) => (
               <li key={phone.href}>
                 <PhoneLink
                   href={phone.href}
@@ -92,26 +92,26 @@ export function Footer() {
             ))}
             <li>
               <a
-                href={site.whatsapp.href}
+                href={contacts.whatsapp.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 items-center gap-2 text-white hover:text-gold"
               >
-                WhatsApp {site.whatsapp.numberLabel}
+                WhatsApp {contacts.whatsapp.numberLabel}
               </a>
             </li>
             <li>
               <a
-                href={`mailto:${site.email}`}
+                href={`mailto:${contacts.email}`}
                 className="inline-flex min-h-11 items-start gap-2 text-white hover:text-gold"
               >
                 <Mail className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
-                <span className="break-all">{site.email}</span>
+                <span className="break-all">{contacts.email}</span>
               </a>
             </li>
             <li className="flex items-start gap-2 text-white/90">
               <MapPin className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
-              {site.serviceArea}
+              {contacts.serviceArea}
             </li>
           </ul>
         </div>
@@ -120,7 +120,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <Container className="flex flex-col gap-3 py-5 text-[0.82rem] text-white/80 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {site.name}. All rights reserved.
+            © {new Date().getFullYear()} {contacts.name}. All rights reserved.
           </p>
           <p>
             <a

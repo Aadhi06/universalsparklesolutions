@@ -17,8 +17,8 @@ export default function AboutPage() {
     <>
       <PageIntro
         eyebrow="About Us"
-        title="A professional cleaning team for commercial and facility environments"
-        intro="Universal Sparkle Solution Pty Ltd provides commercial cleaning and facility support using experienced staff, modern equipment, environmentally responsible products and quality assurance processes."
+        title="A professional cleaning team for workplaces, homes and specialist interiors"
+        intro="Universal Sparkle Solution Pty Ltd provides commercial, residential and specialist cleaning using experienced staff, modern equipment, environmentally responsible products and quality assurance processes."
       />
       <section className="bg-white py-12 lg:py-20">
         <Container className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
@@ -43,9 +43,11 @@ export default function AboutPage() {
               where the work requires it.
             </p>
             <p className="mt-4 leading-relaxed text-body">
-              Our primary work is commercial and facility cleaning. Residential
-              cleaning, including routine work in NDIS homes, is available as a
-              secondary service.
+              Workplaces remain a core part of the company. House cleaning, end
+              of lease, carpet, steam furniture, glass, ceiling, childcare and
+              last-minute visits are quoted as their own services. Routine
+              cleaning in NDIS homes is available as residential work, not as a
+              registration claim.
             </p>
             <ul className="mt-8 space-y-3">
               {aboutPoints.map((point) => (

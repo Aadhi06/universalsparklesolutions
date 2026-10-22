@@ -5,12 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
-import { navigation, site } from "@/lib/site";
+import { navigation, serviceGroups, servicesByGroup, site } from "@/lib/site";
+import type { PublicContacts } from "@/lib/store/settings";
 import { cn } from "@/lib/cn";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 
-export function Header() {
+export function Header({ contacts = site }: { contacts?: PublicContacts }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -71,12 +72,12 @@ export function Header() {
               Solution Pty Ltd
             </span>
           </span>
-          <span className="sr-only">{site.name} home</span>
+          <span className="sr-only">{contacts.name} home</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           {navigation.map((item) => {
-            if ("children" in item && item.children) {
+            if ("hasServiceMenu" in item && item.hasServiceMenu) {
               return (
                 <div key={item.href} className="relative" ref={servicesRef}>
                   <button
@@ -101,25 +102,37 @@ export function Header() {
                   {servicesOpen ? (
                     <div
                       id={menuId}
-                      className="absolute top-full left-0 z-50 mt-1 min-w-[280px] rounded-[6px] border border-line bg-white py-2 shadow-soft"
+                      className="absolute top-full left-0 z-50 mt-1 w-[min(46rem,calc(100vw-2rem))] rounded-[6px] border border-line bg-white p-5 shadow-soft"
                     >
+                      <div className="grid gap-6 sm:grid-cols-3">
+                        {serviceGroups.map((group) => (
+                          <div key={group.id}>
+                            <p className="text-[0.72rem] font-semibold tracking-[0.14em] text-blue uppercase">
+                              {group.title}
+                            </p>
+                            <ul className="mt-2">
+                              {servicesByGroup(group.id).map((service) => (
+                                <li key={service.href}>
+                                  <Link
+                                    href={service.href}
+                                    onClick={closeMenus}
+                                    className="flex min-h-10 items-center text-[0.92rem] text-body hover:text-navy"
+                                  >
+                                    {service.shortTitle}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
                       <Link
                         href="/services"
                         onClick={closeMenus}
-                        className="block px-4 py-2.5 text-[0.92rem] font-semibold text-navy hover:bg-surface"
+                        className="mt-4 inline-flex min-h-11 items-center font-semibold text-blue"
                       >
-                        All services
+                        View all services
                       </Link>
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          onClick={closeMenus}
-                          className="block px-4 py-2.5 text-[0.92rem] text-body hover:bg-surface hover:text-navy"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
                     </div>
                   ) : null}
                 </div>
@@ -170,7 +183,7 @@ export function Header() {
           id="mobile-navigation"
           className="border-t border-line bg-white lg:hidden"
         >
-          <Container className="flex max-h-[min(32rem,calc(100dvh-8.5rem))] flex-col gap-1 overflow-y-auto py-3 pb-6">
+          <Container className="flex max-h-[min(38rem,calc(100dvh-8.5rem))] flex-col gap-1 overflow-y-auto py-3 pb-6">
             {navigation.map((item) => (
               <div key={item.href}>
                 <Link
@@ -180,16 +193,23 @@ export function Header() {
                 >
                   {item.label}
                 </Link>
-                {"children" in item && item.children
-                  ? item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={closeMenus}
-                        className="flex min-h-11 items-center pl-4 text-[0.98rem] text-body"
-                      >
-                        {child.label}
-                      </Link>
+                {"hasServiceMenu" in item && item.hasServiceMenu
+                  ? serviceGroups.map((group) => (
+                      <div key={group.id} className="mt-2 pl-1">
+                        <p className="pt-2 text-[0.7rem] font-semibold tracking-[0.14em] text-blue uppercase">
+                          {group.title}
+                        </p>
+                        {servicesByGroup(group.id).map((service) => (
+                          <Link
+                            key={service.href}
+                            href={service.href}
+                            onClick={closeMenus}
+                            className="flex min-h-11 items-center pl-3 text-[0.98rem] text-body"
+                          >
+                            {service.shortTitle}
+                          </Link>
+                        ))}
+                      </div>
                     ))
                   : null}
               </div>

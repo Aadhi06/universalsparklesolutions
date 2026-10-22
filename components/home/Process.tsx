@@ -16,6 +16,9 @@ export function Process() {
               <h3 className="font-display mt-2 text-[1.1rem] font-semibold text-navy">
                 {step.title}
               </h3>
+              <p className="mt-2 text-[0.95rem] leading-relaxed text-body">
+                {step.text}
+              </p>
             </li>
           ))}
         </ol>

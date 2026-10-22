@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Manrope } from "next/font/google";
-import { SiteShell } from "@/components/layout/SiteShell";
 import { getSiteUrl, site } from "@/lib/site";
 import "./globals.css";
 
@@ -27,11 +26,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `Commercial Cleaning Melbourne | ${site.shortName}`,
+    default: `Cleaning Melbourne | ${site.shortName}`,
     template: `%s | ${site.shortName}`,
   },
   description:
-    "Professional commercial, healthcare, education and builders cleaning across Melbourne Metropolitan Area and Regional Victoria.",
+    "Professional office, home, healthcare, education and builders cleaning across Melbourne Metropolitan Area and Regional Victoria.",
   alternates: {
     canonical: "/",
   },
@@ -41,7 +40,7 @@ export const metadata: Metadata = {
     siteName: site.shortName,
     title: `${site.shortName} | Cleaning & Facility Support`,
     description:
-      "Commercial, healthcare, education and builders cleaning across Melbourne Metropolitan Area and Regional Victoria.",
+      "Office, home, healthcare, education and builders cleaning across Melbourne Metropolitan Area and Regional Victoria.",
     url: siteUrl,
     images: [
       {
@@ -85,7 +84,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <SiteShell>{children}</SiteShell>
+        {children}
       </body>
     </html>
   );

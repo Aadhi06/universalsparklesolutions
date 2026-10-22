@@ -4,6 +4,7 @@ import { Quote } from "@/components/home/Quote";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { Container } from "@/components/ui/Container";
 import { site } from "@/lib/site";
+import { getRuntimeContacts } from "@/lib/store/settings";
 
 export const metadata: Metadata = {
   title: "Contact and Quote",
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const contacts = await getRuntimeContacts();
+
   return (
     <>
       <PageIntro
@@ -24,7 +27,7 @@ export default function ContactPage() {
           <div className="relative aspect-[16/11] overflow-hidden rounded-[6px]">
             <Image
               src="/images/melbourne.jpg"
-              alt={`Melbourne skyline and Princes Bridge, representing ${site.serviceArea}.`}
+              alt={`Melbourne skyline and Princes Bridge, representing ${contacts.serviceArea}.`}
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 600px"
@@ -35,13 +38,16 @@ export default function ContactPage() {
               How to reach us
             </h2>
             <p className="mt-4 leading-relaxed text-body">
-              The team works across {site.serviceArea}. Tell us the premises
+              The team works across {contacts.serviceArea}. Tell us the premises
               type, suburb or postcode, and the service you need.
             </p>
             <ul className="mt-6 space-y-3 font-medium text-navy">
-              <li>Call {site.phones[0].label} or {site.phones[1].label}</li>
-              <li>WhatsApp {site.whatsapp.numberLabel}</li>
-              <li className="break-all">{site.email}</li>
+              <li>
+                Call {contacts.phones[0]?.label}
+                {contacts.phones[1] ? ` or ${contacts.phones[1].label}` : ""}
+              </li>
+              <li>WhatsApp {contacts.whatsapp.numberLabel}</li>
+              <li className="break-all">{contacts.email}</li>
             </ul>
           </div>
         </Container>

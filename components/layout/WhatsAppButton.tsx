@@ -3,9 +3,14 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { site } from "@/lib/site";
+import type { PublicContacts } from "@/lib/store/settings";
 import { trackWhatsAppClick } from "@/lib/analytics";
 
-export function WhatsAppButton() {
+export function WhatsAppButton({
+  contacts = site,
+}: {
+  contacts?: PublicContacts;
+}) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -16,11 +21,11 @@ export function WhatsAppButton() {
 
   return createPortal(
     <a
-      href={site.whatsapp.href}
+      href={contacts.whatsapp.href}
       target="_blank"
       rel="noopener noreferrer"
       onClick={trackWhatsAppClick}
-      aria-label={`${site.whatsapp.label}: ${site.whatsapp.numberLabel}`}
+      aria-label={`${contacts.whatsapp.label}: ${contacts.whatsapp.numberLabel}`}
       className="whatsapp-fab"
       style={{
         position: "fixed",

@@ -11,11 +11,11 @@ export function Hero() {
             Cleaning & Facility Support
           </p>
           <h1 className="font-display mt-3 text-[1.7rem] leading-[1.15] font-semibold text-pretty text-navy sm:mt-4 sm:text-[2.65rem] lg:text-[3.1rem]">
-            Commercial Cleaning in Melbourne & Regional Victoria
+            Cleaning for Workplaces & Homes in Melbourne
           </h1>
           <p className="mt-4 max-w-xl text-[1rem] leading-relaxed text-body sm:mt-5 sm:text-[1.08rem]">
-            Offices, clinics, schools and completed builds — cleaned to a
-            consistent standard, every visit.
+            Offices, clinics, schools and houses across Melbourne and Regional
+            Victoria — a consistent standard, every visit.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
             <ButtonLink href="/contact#quote" className="w-full sm:w-auto">

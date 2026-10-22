@@ -2,9 +2,10 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { PhoneLink } from "@/components/analytics/PhoneLink";
 import { QuoteForm } from "@/components/forms/QuoteForm";
 import { Container } from "@/components/ui/Container";
-import { site } from "@/lib/site";
+import { getRuntimeContacts } from "@/lib/store/settings";
 
-export function Quote() {
+export async function Quote() {
+  const contacts = await getRuntimeContacts();
   return (
     <section id="quote" className="scroll-mt-24 bg-white py-12 sm:py-20 lg:py-24">
       <Container className="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
@@ -17,7 +18,7 @@ export function Quote() {
             to discuss scope. A request is not a booking.
           </p>
           <ul className="mt-8 space-y-4 text-[0.98rem]">
-            {site.phones.map((phone) => (
+            {contacts.phones.map((phone) => (
               <li key={phone.href}>
                 <PhoneLink
                   href={phone.href}
@@ -31,7 +32,7 @@ export function Quote() {
             ))}
             <li>
               <a
-                href={site.whatsapp.href}
+                href={contacts.whatsapp.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 items-center gap-3 text-white hover:text-gold"
@@ -44,21 +45,21 @@ export function Quote() {
                     />
                   </svg>
                 </span>
-                WhatsApp {site.whatsapp.numberLabel}
+                WhatsApp {contacts.whatsapp.numberLabel}
               </a>
             </li>
             <li>
               <a
-                href={`mailto:${site.email}`}
+                href={`mailto:${contacts.email}`}
                 className="inline-flex min-h-11 items-start gap-3 text-white hover:text-gold"
               >
                 <Mail className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
-                <span className="break-all">{site.email}</span>
+                <span className="break-all">{contacts.email}</span>
               </a>
             </li>
             <li className="flex items-start gap-3 text-white/80">
               <MapPin className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
-              {site.serviceArea}
+              {contacts.serviceArea}
             </li>
           </ul>
         </div>

@@ -1,7 +1,6 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { NextResponse } from "next/server";
 import { quoteFrequencies, quoteServices } from "@/lib/site";
+import { saveEnquiry } from "@/lib/store/enquiries";
 
 const MAX_FILES = 3;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -124,7 +123,7 @@ export async function POST(request: Request) {
     });
 
     if (!upstream.ok) {
-      await persistLocally(enquiry);
+      await saveEnquiry(enquiry);
       return NextResponse.json({
         ok: true,
         message:
@@ -135,22 +134,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  await persistLocally(enquiry);
+  await saveEnquiry(enquiry);
   return NextResponse.json({ ok: true });
-}
-
-async function persistLocally(enquiry: object) {
-  const directory = path.join(process.cwd(), ".data");
-  const file = path.join(directory, "enquiries.json");
-  await mkdir(directory, { recursive: true });
-
-  let existing: object[] = [];
-  try {
-    existing = JSON.parse(await readFile(file, "utf8")) as object[];
-  } catch {
-    existing = [];
-  }
-
-  existing.push(enquiry);
-  await writeFile(file, JSON.stringify(existing, null, 2));
 }
