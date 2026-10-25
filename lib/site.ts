@@ -36,6 +36,7 @@ export const navigation = [
   { href: "/about", label: "About Us" },
   { href: "/services", label: "Services", hasServiceMenu: true },
   { href: "/#current-work", label: "Our Work" },
+  { href: "/blog", label: "Guides" },
   { href: "/contact", label: "Contact" },
 ] as const;
 
