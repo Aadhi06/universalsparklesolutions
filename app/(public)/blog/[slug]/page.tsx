@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogParagraph } from "@/components/blog/BlogParagraph";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -31,6 +33,7 @@ export async function generateMetadata({
       description: post.description,
       url: `/blog/${post.slug}`,
       publishedTime: post.published,
+      images: [{ url: post.image, alt: post.imageAlt }],
     },
   };
 }
@@ -52,6 +55,7 @@ export default async function BlogPostPage({
     description: post.description,
     datePublished: post.published,
     dateModified: post.published,
+    image: `${getSiteUrl()}${post.image}`,
     author: {
       "@type": "Organization",
       name: "Universal Sparkle Solution Pty Ltd",
@@ -70,15 +74,23 @@ export default async function BlogPostPage({
       <PageIntro eyebrow="Guide" title={post.title} intro={post.description} />
       <article className="bg-white py-12 lg:py-16">
         <Container className="max-w-3xl">
-          <p className="text-sm text-muted">{formatPostDate(post.published)}</p>
+          <div className="relative aspect-[16/9] overflow-hidden rounded-[6px] bg-surface">
+            <Image
+              src={post.image}
+              alt={post.imageAlt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 768px"
+              priority
+            />
+          </div>
+          <p className="mt-5 text-sm text-muted">{formatPostDate(post.published)}</p>
           <div className="mt-8 space-y-10">
             {post.sections.map((section) => (
               <section key={section.heading}>
                 <h2 className="font-display text-2xl font-semibold text-navy">{section.heading}</h2>
                 {section.paragraphs.map((paragraph) => (
-                  <p key={paragraph} className="mt-4 leading-relaxed text-body">
-                    {paragraph}
-                  </p>
+                  <BlogParagraph key={paragraph} text={paragraph} />
                 ))}
               </section>
             ))}
@@ -101,11 +113,20 @@ export default async function BlogPostPage({
       <section className="border-t border-line bg-surface py-12">
         <Container>
           <h2 className="font-display text-2xl font-semibold text-navy">More guides</h2>
-          <ul className="mt-6 grid gap-4 md:grid-cols-3">
+          <ul className="mt-6 grid gap-5 md:grid-cols-3">
             {related.map((item) => (
               <li key={item.slug}>
-                <Link href={`/blog/${item.slug}`} className="font-semibold text-navy hover:text-blue">
-                  {item.title}
+                <Link href={`/blog/${item.slug}`} className="group block">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-[6px] bg-white">
+                    <Image
+                      src={item.image}
+                      alt={item.imageAlt}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                  <p className="mt-3 font-semibold text-navy group-hover:text-blue">{item.title}</p>
                 </Link>
               </li>
             ))}

@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { StatusBadge } from "@/components/admin/StatusBadge";
+import { bulkEnquiryAction } from "@/app/admin/actions";
+import { PushOptions } from "@/components/admin/PushOptions";
+import { RecordList } from "@/components/admin/RecordList";
+import { ButtonLink } from "@/components/ui/Button";
 import { formatDateTime } from "@/lib/admin/format";
 import { enquiryStatuses, listEnquiries } from "@/lib/store/enquiries";
 import { cn } from "@/lib/cn";
@@ -17,13 +20,28 @@ export default async function EnquiriesPage({
 
   return (
     <div className="mx-auto max-w-6xl">
-      <h1 className="font-display text-[1.7rem] font-semibold text-navy sm:text-[2rem]">
-        Enquiries
-      </h1>
-      <p className="mt-2 text-body">
-        Quote requests from the website. Open a record to update its status or
-        add a note.
-      </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="font-display text-[1.7rem] font-semibold text-navy sm:text-[2rem]">
+            Enquiries
+          </h1>
+          <p className="mt-2 text-body">
+            Add a quote request, or open one to edit, note or delete it.
+          </p>
+        </div>
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <ButtonLink href="/admin/customers" variant="secondary" className="w-full sm:w-auto">
+            Customers
+          </ButtonLink>
+          <ButtonLink href="/admin/enquiries/new" className="w-full sm:w-auto">
+            New enquiry
+          </ButtonLink>
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <PushOptions />
+      </div>
 
       <div className="mt-6 flex flex-wrap gap-2">
         <FilterLink href="/admin/enquiries" active={!status} label="All" count={enquiries.length} />
@@ -43,33 +61,21 @@ export default async function EnquiriesPage({
           No enquiries in this view.
         </p>
       ) : (
-        <ul className="mt-6 divide-y divide-line overflow-hidden rounded-[6px] border border-line bg-white">
-          {filtered.map((enquiry) => (
-            <li key={enquiry.id}>
-              <Link
-                href={`/admin/enquiries/${enquiry.id}`}
-                className="grid gap-3 px-5 py-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_auto] sm:items-center"
-              >
-                <div>
-                  <p className="font-semibold text-navy">{enquiry.fullName}</p>
-                  <p className="text-sm text-muted">
-                    {enquiry.email} · {enquiry.phone}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-navy">{enquiry.service}</p>
-                  <p className="text-sm text-muted">{enquiry.location}</p>
-                </div>
-                <div className="flex items-center gap-3 sm:justify-end">
-                  <StatusBadge status={enquiry.status} />
-                  <span className="text-sm text-muted">
-                    {formatDateTime(enquiry.receivedAt)}
-                  </span>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <RecordList
+          items={filtered.map((enquiry) => ({
+            id: enquiry.id,
+            href: `/admin/enquiries/${enquiry.id}`,
+            title: enquiry.fullName,
+            phone: enquiry.phone,
+            detail: `${enquiry.service} · ${enquiry.location}`,
+            when: formatDateTime(enquiry.receivedAt),
+            status: enquiry.status,
+          }))}
+          statuses={enquiryStatuses}
+          returnTo={status ? `/admin/enquiries?status=${status}` : "/admin/enquiries"}
+          noun="enquiries"
+          action={bulkEnquiryAction}
+        />
       )}
     </div>
   );

@@ -15,6 +15,7 @@ export function ConfirmSubmitButton({
     <Button
       type="submit"
       variant="secondary"
+      formNoValidate
       formAction={formAction}
       onClick={(event) => {
         if (!window.confirm(message)) {

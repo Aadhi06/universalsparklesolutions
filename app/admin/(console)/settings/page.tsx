@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { saveSettingsAction } from "@/app/admin/actions";
+import { PushOptions } from "@/components/admin/PushOptions";
 import { Button } from "@/components/ui/Button";
 import { getSettings } from "@/lib/store/settings";
 
@@ -14,6 +16,10 @@ export default async function SettingsPage() {
         Contact details and homepage search titles. These update the public
         website when you save.
       </p>
+
+      <div className="mt-6">
+        <PushOptions />
+      </div>
 
       <form action={saveSettingsAction} className="mt-8 space-y-5 rounded-[6px] border border-line bg-white p-5 sm:p-6">
         <Field label="Email" name="email" type="email" defaultValue={settings.email} required />
@@ -52,6 +58,9 @@ export default async function SettingsPage() {
         </div>
         <Button type="submit">Save settings</Button>
       </form>
+      <Link href="/" className="mt-6 inline-flex min-h-11 items-center font-semibold text-blue">
+        View website
+      </Link>
     </div>
   );
 }

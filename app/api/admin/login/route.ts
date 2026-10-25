@@ -5,6 +5,7 @@ import {
   getAdminCredentials,
   sessionCookieOptions,
 } from "@/lib/admin/session";
+import { authenticateUser } from "@/lib/store/users";
 
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_REQUESTS = 8;
@@ -57,19 +58,21 @@ export async function POST(request: Request) {
   const username = body?.username?.trim() ?? "";
   const password = body?.password ?? "";
 
-  if (
-    !username ||
-    !password ||
-    !safeEqual(username, credentials.username) ||
-    !safeEqual(password, credentials.password)
-  ) {
+  const ownerMatch =
+    Boolean(username) &&
+    Boolean(password) &&
+    safeEqual(username.toLowerCase(), credentials.username.toLowerCase()) &&
+    safeEqual(password, credentials.password);
+
+  const staff = ownerMatch ? null : await authenticateUser(username, password);
+  if (!ownerMatch && !staff) {
     return NextResponse.json(
       { message: "Those details did not match. Check the username and password." },
       { status: 401 },
     );
   }
 
-  const token = await createSessionToken(username);
+  const token = await createSessionToken(staff?.username ?? credentials.username);
   const cookie = sessionCookieOptions();
   const response = NextResponse.json({ ok: true });
   response.cookies.set({

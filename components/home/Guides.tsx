@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { posts } from "@/lib/blog";
 import { Container } from "@/components/ui/Container";
@@ -19,15 +20,29 @@ export function Guides() {
             All guides
           </Link>
         </div>
-        <ul className="mt-8 grid gap-4 md:grid-cols-3">
+        <ul className="mt-8 grid gap-5 md:grid-cols-3">
           {posts.slice(0, 3).map((post) => (
-            <li key={post.slug} className="rounded-[6px] border border-line p-5">
-              <h3 className="font-display text-xl font-semibold text-navy">
-                <Link href={`/blog/${post.slug}`} className="hover:text-blue">
-                  {post.title}
-                </Link>
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-body">{post.description}</p>
+            <li key={post.slug}>
+              <Link
+                href={`/blog/${post.slug}`}
+                className="group flex h-full flex-col overflow-hidden rounded-[6px] border border-line"
+              >
+                <div className="relative aspect-[16/10] bg-surface">
+                  <Image
+                    src={post.image}
+                    alt={post.imageAlt}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="font-display text-xl font-semibold text-navy group-hover:text-blue">
+                    {post.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-body">{post.description}</p>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>

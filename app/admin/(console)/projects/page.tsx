@@ -25,49 +25,61 @@ export default async function ProjectsPage() {
         </ButtonLink>
       </div>
 
-      <ul className="mt-8 grid gap-5 md:grid-cols-2">
-        {projects.map((project) => (
-          <li key={project.id} className="overflow-hidden rounded-[6px] border border-line bg-white">
-            <div className="relative aspect-[16/10] bg-surface">
-              <Image
-                src={project.image}
-                alt={project.imageAlt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 480px"
-              />
-            </div>
-            <div className="p-5">
-              <p className="text-[0.72rem] font-semibold tracking-[0.14em] text-blue uppercase">
-                {project.category}
-              </p>
-              <h2 className="font-display mt-1 text-xl font-semibold text-navy">
-                {project.title}
-              </h2>
-              <p className="mt-2 text-body">{project.homeLine}</p>
-              <p className="mt-3 text-sm font-medium text-navy">
-                {project.published ? "Published on the website" : "Hidden from the website"}
-                {project.isNamedClient ? " · Named client" : ""}
-              </p>
-              <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-                <ButtonLink
-                  href={`/admin/projects/${project.id}`}
-                  variant="secondary"
-                  className="w-full sm:w-auto"
-                >
-                  Edit
-                </ButtonLink>
-                <form action={toggleProjectPublishedAction}>
-                  <input type="hidden" name="id" value={project.id} />
-                  <Button type="submit" variant="ghost" className="w-full sm:w-auto">
-                    {project.published ? "Hide" : "Publish"}
-                  </Button>
-                </form>
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-8 overflow-x-auto rounded-[6px] border border-line bg-white">
+        <table className="w-full min-w-[720px] text-left text-sm">
+          <thead className="border-b border-line bg-surface text-xs font-semibold tracking-[0.08em] text-muted uppercase">
+            <tr>
+              <th className="w-12 px-3 py-3">#</th>
+              <th className="px-3 py-3">Project</th>
+              <th className="px-3 py-3">Category</th>
+              <th className="px-3 py-3">Website</th>
+              <th className="px-3 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {projects.map((project, index) => (
+              <tr key={project.id} className="border-b border-line last:border-b-0">
+                <td className="px-3 py-3 font-semibold text-navy tabular-nums">{index + 1}</td>
+                <td className="px-3 py-3">
+                  <div className="flex items-center gap-3">
+                    <div className="relative size-14 shrink-0 overflow-hidden rounded-[6px] bg-surface">
+                      <Image
+                        src={project.image}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="56px"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-navy">{project.title}</p>
+                      <p className="text-muted">{project.homeLine}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-3 py-3 text-muted">{project.category}</td>
+                <td className="px-3 py-3 text-navy">
+                  {project.published ? "Published" : "Hidden"}
+                  {project.isNamedClient ? " · Named client" : ""}
+                </td>
+                <td className="px-3 py-3">
+                  <div className="flex flex-wrap gap-2">
+                    <ButtonLink href={`/admin/projects/${project.id}`} variant="secondary">
+                      Edit
+                    </ButtonLink>
+                    <form action={toggleProjectPublishedAction}>
+                      <input type="hidden" name="id" value={project.id} />
+                      <Button type="submit" variant="ghost">
+                        {project.published ? "Hide" : "Publish"}
+                      </Button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

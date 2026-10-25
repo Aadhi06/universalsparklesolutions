@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { notifyStaff } from "@/lib/admin/notify";
+import { sendCustomerEnquiryReceived, sendNewEnquiryEmail } from "@/lib/email/sendNewEnquiry";
 import { quoteFrequencies, quoteServices } from "@/lib/site";
 import { saveEnquiry } from "@/lib/store/enquiries";
 
@@ -109,31 +111,50 @@ export async function POST(request: Request) {
     });
   }
 
-  const laravelUrl = process.env.LARAVEL_API_URL;
+  const laravelUrl = process.env.LARAVEL_API_URL?.trim();
   if (laravelUrl) {
-    const upstream = await fetch(`${laravelUrl.replace(/\/$/, "")}/enquiries`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: process.env.LARAVEL_API_TOKEN
-          ? `Bearer ${process.env.LARAVEL_API_TOKEN}`
-          : "",
-      },
-      body: formData,
-    });
-
-    if (!upstream.ok) {
-      await saveEnquiry(enquiry);
-      return NextResponse.json({
-        ok: true,
-        message:
-          "Your enquiry has been received. Staff notification will be completed once the Laravel API is available.",
+    try {
+      const upstream = await fetch(`${laravelUrl.replace(/\/$/, "")}/enquiries`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: process.env.LARAVEL_API_TOKEN
+            ? `Bearer ${process.env.LARAVEL_API_TOKEN}`
+            : "",
+        },
+        body: formData,
       });
+    } catch {
+      // Keep the enquiry when the Laravel API cannot be reached.
     }
-
-    return NextResponse.json({ ok: true });
   }
 
-  await saveEnquiry(enquiry);
+  try {
+    await saveEnquiry(enquiry);
+  } catch {
+    // The live host cannot keep the file. The email below is the record.
+  }
+
+  const emailed = await sendNewEnquiryEmail(enquiry);
+  await sendCustomerEnquiryReceived(enquiry);
+  try {
+    await notifyStaff({
+      topic: "enquiries",
+      title: "New enquiry",
+      body: `${enquiry.fullName} · ${enquiry.phone} · ${enquiry.service}`,
+      url: `/admin/enquiries/${enquiry.id}`,
+      email: false,
+    });
+  } catch {
+    // A push failure should not stop the quote request.
+  }
+
+  if (emailed === "failed") {
+    return NextResponse.json(
+      { message: "We could not send your enquiry. Please call us and we will take the details." },
+      { status: 503 },
+    );
+  }
+
   return NextResponse.json({ ok: true });
 }

@@ -1,0 +1,5 @@
+public/images/service-childcare.jpg
+.data
+.env
+.env.*
+!.env.example

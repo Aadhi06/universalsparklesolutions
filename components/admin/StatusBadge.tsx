@@ -5,6 +5,10 @@ const styles: Record<string, string> = {
   Contacted: "bg-navy/10 text-navy",
   Quoted: "bg-gold/20 text-navy",
   Closed: "bg-surface text-muted",
+  Scheduled: "bg-blue/10 text-blue",
+  Confirmed: "bg-navy/10 text-navy",
+  Completed: "bg-gold/25 text-navy",
+  Cancelled: "bg-surface text-muted",
 };
 
 export function StatusBadge({ status }: { status: string }) {

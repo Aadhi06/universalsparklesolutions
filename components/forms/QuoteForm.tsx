@@ -87,7 +87,7 @@ export function QuoteForm() {
         method: "POST",
         body: data,
       });
-      const payload = (await response.json()) as { message?: string };
+      const payload = (await response.json().catch(() => ({}))) as { message?: string };
 
       if (!response.ok) {
         throw new Error(payload.message || "We could not send your enquiry.");
