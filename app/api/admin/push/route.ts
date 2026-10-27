@@ -64,14 +64,19 @@ export async function POST(request: Request) {
 
   if (!enquiries && !appointments) {
     await deletePushSubscription(endpoint);
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, enabled: false });
   }
 
-  await savePushSubscription({
+  const saved = await savePushSubscription({
     endpoint,
     keys: { p256dh, auth },
     enquiries,
     appointments,
   });
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({
+    ok: true,
+    enabled: true,
+    enquiries: saved.enquiries,
+    appointments: saved.appointments,
+  });
 }

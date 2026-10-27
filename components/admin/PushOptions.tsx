@@ -1,23 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-type Flags = {
-  enquiries: boolean;
-  appointments: boolean;
-};
+import {
+  clearStoredPushFlags,
+  getAdminServiceWorker,
+  readStoredPushFlags,
+  urlBase64ToUint8Array,
+  writeStoredPushFlags,
+  type PushFlags,
+} from "@/lib/admin/pushClient";
 
 export function PushOptions() {
-  const [flags, setFlags] = useState<Flags>({ enquiries: false, appointments: false });
+  const [flags, setFlags] = useState<PushFlags>({ enquiries: false, appointments: false });
   const [configured, setConfigured] = useState(true);
   const [supported, setSupported] = useState(true);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
+      const stored = readStoredPushFlags();
+      if (stored && (stored.enquiries || stored.appointments) && !cancelled) {
+        setFlags(stored);
+      }
+
       if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
         if (!cancelled) setSupported(false);
         return;
@@ -27,40 +36,85 @@ export function PushOptions() {
       if (!response.ok) return;
       const data = (await response.json()) as {
         configured: boolean;
-        subscriptions: Array<Flags & { endpoint: string }>;
+        publicKey: string;
+        subscriptions: Array<PushFlags & { endpoint: string }>;
       };
       if (cancelled) return;
       setConfigured(data.configured);
 
-      const registration = await navigator.serviceWorker.getRegistration("/admin/");
-      const current = await registration?.pushManager.getSubscription();
-      const match = data.subscriptions.find((item) => item.endpoint === current?.endpoint);
-      if (!cancelled && match) {
-        setFlags({ enquiries: match.enquiries, appointments: match.appointments });
+      const registration = await getAdminServiceWorker();
+      if (!registration || cancelled) return;
+
+      let subscription = await registration.pushManager.getSubscription();
+      const match = data.subscriptions.find((item) => item.endpoint === subscription?.endpoint);
+
+      let nextFlags: PushFlags = { enquiries: false, appointments: false };
+      if (match) {
+        nextFlags = { enquiries: match.enquiries, appointments: match.appointments };
+      } else if (stored && (stored.enquiries || stored.appointments)) {
+        nextFlags = stored;
+      }
+
+      // Keep server copy in sync whenever this device still wants alerts.
+      if (data.configured && (nextFlags.enquiries || nextFlags.appointments)) {
+        if (Notification.permission === "granted") {
+          if (!subscription) {
+            subscription = await registration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: urlBase64ToUint8Array(data.publicKey),
+            });
+          }
+          if (subscription) {
+            await fetch("/api/admin/push", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                subscription: subscription.toJSON(),
+                enquiries: nextFlags.enquiries,
+                appointments: nextFlags.appointments,
+              }),
+            });
+          }
+        }
+      }
+
+      if (!cancelled) {
+        setFlags(nextFlags);
+        writeStoredPushFlags(nextFlags);
+        setReady(true);
       }
     }
 
-    load().catch(() => {
-      if (!cancelled) setMessage("Notifications could not be loaded.");
-    });
+    load()
+      .catch(() => {
+        if (!cancelled) setMessage("Notifications could not be loaded.");
+      })
+      .finally(() => {
+        if (!cancelled) setReady(true);
+      });
 
     return () => {
       cancelled = true;
     };
   }, []);
 
-  async function update(next: Flags) {
+  async function update(next: PushFlags) {
     setBusy(true);
     setMessage("");
     const previous = flags;
     setFlags(next);
+    writeStoredPushFlags(next);
 
     try {
       if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
         throw new Error("This browser cannot receive push notifications.");
       }
 
-      const registration = await navigator.serviceWorker.ready;
+      const registration = await getAdminServiceWorker();
+      if (!registration) {
+        throw new Error("This browser cannot receive push notifications.");
+      }
+
       let subscription = await registration.pushManager.getSubscription();
       const enabled = next.enquiries || next.appointments;
 
@@ -83,28 +137,38 @@ export function PushOptions() {
         });
       }
 
-      if (subscription) {
-        await fetch("/api/admin/push", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            subscription: subscription.toJSON(),
-            enquiries: next.enquiries,
-            appointments: next.appointments,
-          }),
-        }).then(async (response) => {
-          if (!response.ok) {
-            const data = (await response.json().catch(() => ({}))) as { message?: string };
-            throw new Error(data.message || "Could not save the notification setting.");
-          }
-        });
+      if (!subscription) {
+        if (enabled) throw new Error("Could not create a push subscription.");
+        clearStoredPushFlags();
+        return;
       }
 
-      if (!enabled && subscription) {
-        await subscription.unsubscribe();
+      const response = await fetch("/api/admin/push", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscription: subscription.toJSON(),
+          enquiries: next.enquiries,
+          appointments: next.appointments,
+        }),
+      });
+      if (!response.ok) {
+        const data = (await response.json().catch(() => ({}))) as { message?: string };
+        throw new Error(data.message || "Could not save the notification setting.");
       }
+
+      // Only remove the browser subscription when both topics are turned off.
+      if (!enabled) {
+        await subscription.unsubscribe();
+        clearStoredPushFlags();
+      } else {
+        writeStoredPushFlags(next);
+      }
+
+      setMessage(enabled ? "Notifications saved on this device." : "Notifications turned off.");
     } catch (error) {
       setFlags(previous);
+      writeStoredPushFlags(previous);
       setMessage(error instanceof Error ? error.message : "Could not update notifications.");
     } finally {
       setBusy(false);
@@ -115,8 +179,8 @@ export function PushOptions() {
     <section className="rounded-[6px] border border-line bg-white p-4 sm:p-5">
       <h2 className="font-display text-lg font-semibold text-navy">Push notifications</h2>
       <p className="mt-1 text-sm text-body">
-        Alerts on this phone for new enquiries and appointment changes. On iPhone, add USS
-        Admin to the home screen first.
+        Alerts on this phone for new enquiries and appointment changes. Once enabled, they stay on
+        until you turn them off. On iPhone, add USS Admin to the home screen first.
       </p>
       {!supported ? (
         <p className="mt-3 text-sm text-navy">
@@ -131,13 +195,13 @@ export function PushOptions() {
           <Switch
             label="Enquiries"
             checked={flags.enquiries}
-            disabled={busy}
+            disabled={busy || !ready}
             onChange={(enquiries) => update({ ...flags, enquiries })}
           />
           <Switch
             label="Appointments"
             checked={flags.appointments}
-            disabled={busy}
+            disabled={busy || !ready}
             onChange={(appointments) => update({ ...flags, appointments })}
           />
         </div>
@@ -180,15 +244,4 @@ function Switch({
       </span>
     </button>
   );
-}
-
-function urlBase64ToUint8Array(value: string) {
-  const padding = "=".repeat((4 - (value.length % 4)) % 4);
-  const base64 = (value + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const raw = atob(base64);
-  const output = new Uint8Array(raw.length);
-  for (let index = 0; index < raw.length; index += 1) {
-    output[index] = raw.charCodeAt(index);
-  }
-  return output;
 }

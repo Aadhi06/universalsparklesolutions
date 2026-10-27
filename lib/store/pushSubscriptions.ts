@@ -1,4 +1,4 @@
-import { readJsonFile, writeJsonFile } from "@/lib/store/io";
+import { readJsonFile, updateJsonFile, writeJsonFile } from "@/lib/store/io";
 
 export type PushSubscriptionRecord = {
   endpoint: string;
@@ -20,22 +20,30 @@ export async function listPushSubscriptions() {
 export async function savePushSubscription(
   record: Omit<PushSubscriptionRecord, "updatedAt">,
 ) {
-  const items = await listPushSubscriptions();
   const next: PushSubscriptionRecord = {
     ...record,
     updatedAt: new Date().toISOString(),
   };
-  const index = items.findIndex((item) => item.endpoint === record.endpoint);
-  if (index === -1) items.push(next);
-  else items[index] = next;
-  await writeJsonFile(FILE, items);
+  await updateJsonFile<PushSubscriptionRecord[]>(FILE, [], (items) => {
+    const index = items.findIndex((item) => item.endpoint === record.endpoint);
+    if (index === -1) return [...items, next];
+    const copy = [...items];
+    copy[index] = next;
+    return copy;
+  });
   return next;
 }
 
 export async function deletePushSubscription(endpoint: string) {
-  const items = await listPushSubscriptions();
-  const next = items.filter((item) => item.endpoint !== endpoint);
-  if (next.length === items.length) return false;
-  await writeJsonFile(FILE, next);
-  return true;
+  let removed = false;
+  await updateJsonFile<PushSubscriptionRecord[]>(FILE, [], (items) => {
+    const next = items.filter((item) => item.endpoint !== endpoint);
+    removed = next.length !== items.length;
+    return next;
+  });
+  return removed;
+}
+
+export async function replacePushSubscriptions(items: PushSubscriptionRecord[]) {
+  await writeJsonFile(FILE, items);
 }

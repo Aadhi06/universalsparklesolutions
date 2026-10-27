@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { getAdminServiceWorker } from "@/lib/admin/pushClient";
 
 export function AdminPwa() {
   useEffect(() => {
-    if (!("serviceWorker" in navigator)) return;
-    navigator.serviceWorker.register("/admin/sw.js", { scope: "/admin/" }).catch(() => {
+    getAdminServiceWorker().catch(() => {
       // Install still works once the browser can reach the worker.
     });
   }, []);
