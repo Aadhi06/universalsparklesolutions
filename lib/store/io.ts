@@ -16,9 +16,11 @@ function enqueue<T>(task: () => Promise<T>) {
   return run;
 }
 
-function blobEnabled() {
+/** Durable Blob store on Vercel; local `.data` for development. */
+export function blobEnabled() {
   return Boolean(
-    process.env.BLOB_STORE_ID?.trim() || process.env.BLOB_READ_WRITE_TOKEN?.trim(),
+    process.env.BLOB_READ_WRITE_TOKEN?.trim() ||
+      (process.env.BLOB_STORE_ID?.trim() && process.env.VERCEL),
   );
 }
 
@@ -69,7 +71,8 @@ export async function readJsonFile<T>(filename: string, fallback: T): Promise<T>
   try {
     if (blobEnabled()) return await readBlobJson(filename, fallback);
     return await readLocalJson(filename, fallback);
-  } catch {
+  } catch (error) {
+    console.error("store-read-failed", filename, error);
     return fallback;
   }
 }
@@ -95,7 +98,8 @@ export async function updateJsonFile<T>(
       current = blobEnabled()
         ? await readBlobJson(filename, fallback)
         : await readLocalJson(filename, fallback);
-    } catch {
+    } catch (error) {
+      console.error("store-read-failed", filename, error);
       current = fallback;
     }
     const next = await update(current);
