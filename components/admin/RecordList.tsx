@@ -66,33 +66,47 @@ export function RecordList({
         {items.map((item, index) => {
           const call = telHref(item.phone);
           return (
-            <li key={item.id} className="rounded-[6px] border border-line bg-white p-4">
-              <div className="flex items-start gap-3">
-                <span className="w-6 shrink-0 pt-1 font-semibold text-navy tabular-nums">{index + 1}</span>
-                <label className="pt-0.5">
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(item.id)}
-                    onChange={() => toggle(item.id)}
-                    className="size-5 accent-blue"
-                    aria-label={`Select ${item.title}`}
-                  />
-                </label>
-                <div className="min-w-0 flex-1">
-                  <Link href={item.href} className="font-semibold text-navy">
-                    {item.title}
-                  </Link>
-                  <p className="mt-1 text-sm text-muted">{item.detail}</p>
-                  {call ? (
-                    <a href={call} className="mt-1 block font-semibold text-blue tabular-nums">
+            <li key={item.id} className="rounded-[6px] border border-line bg-white">
+              <div className="flex items-stretch gap-0">
+                <div className="flex shrink-0 flex-col items-center gap-3 px-3 py-4">
+                  <span className="font-semibold text-navy tabular-nums">{index + 1}</span>
+                  <label className="flex min-h-11 min-w-11 items-center justify-center">
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(item.id)}
+                      onChange={() => toggle(item.id)}
+                      className="size-5 accent-blue"
+                      aria-label={`Select ${item.title}`}
+                      onClick={(event) => event.stopPropagation()}
+                    />
+                  </label>
+                </div>
+                <Link
+                  href={item.href}
+                  className="min-w-0 flex-1 py-4 pr-4 outline-none focus-visible:bg-surface"
+                >
+                  <span className="block font-semibold text-navy">{item.title}</span>
+                  <span className="mt-1 block text-sm text-muted">{item.detail}</span>
+                  {item.phone ? (
+                    <span className="mt-1 block font-semibold text-blue tabular-nums">
                       {item.phone}
-                    </a>
+                    </span>
                   ) : null}
-                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <span className="mt-2 flex flex-wrap items-center gap-2">
                     <StatusBadge status={item.status} />
                     {item.when ? <span className="text-sm text-muted">{item.when}</span> : null}
-                  </div>
-                </div>
+                  </span>
+                </Link>
+                {call ? (
+                  <a
+                    href={call}
+                    className="flex shrink-0 items-center px-3 font-semibold text-blue"
+                    aria-label={`Call ${item.title}`}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    Call
+                  </a>
+                ) : null}
               </div>
             </li>
           );
@@ -117,7 +131,7 @@ export function RecordList({
             {items.map((item, index) => {
               const call = telHref(item.phone);
               return (
-                <tr key={item.id} className="border-b border-line last:border-b-0">
+                <tr key={item.id} className="border-b border-line last:border-b-0 hover:bg-surface/70">
                   <td className="px-3 py-3 font-semibold text-navy tabular-nums">
                     {index + 1}
                   </td>
@@ -136,13 +150,29 @@ export function RecordList({
                     </Link>
                   </td>
                   <td className="px-3 py-3 font-semibold text-blue tabular-nums">
-                    {call ? <a href={call}>{item.phone}</a> : item.phone}
+                    {call ? (
+                      <a href={call} onClick={(event) => event.stopPropagation()}>
+                        {item.phone}
+                      </a>
+                    ) : (
+                      item.phone
+                    )}
                   </td>
-                  <td className="px-3 py-3 text-muted">{item.detail}</td>
                   <td className="px-3 py-3">
-                    <StatusBadge status={item.status} />
+                    <Link href={item.href} className="block text-muted">
+                      {item.detail}
+                    </Link>
                   </td>
-                  <td className="px-3 py-3 whitespace-nowrap text-muted">{item.when}</td>
+                  <td className="px-3 py-3">
+                    <Link href={item.href} className="inline-flex">
+                      <StatusBadge status={item.status} />
+                    </Link>
+                  </td>
+                  <td className="px-3 py-3 whitespace-nowrap text-muted">
+                    <Link href={item.href} className="block">
+                      {item.when}
+                    </Link>
+                  </td>
                 </tr>
               );
             })}
