@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { notifyStaff } from "@/lib/admin/notify";
 import { sendCustomerEnquiryReceived, sendNewEnquiryEmail } from "@/lib/email/sendNewEnquiry";
 import { quoteFrequencies, quoteServices } from "@/lib/site";
+import { syncCustomers } from "@/lib/store/customers";
 import { saveEnquiry } from "@/lib/store/enquiries";
 
 const MAX_FILES = 3;
@@ -40,7 +41,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const formData = await request.formData();
+  let formData: FormData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return NextResponse.json({ message: "Invalid form submission." }, { status: 400 });
+  }
 
   if (asString(formData.get("company_website"))) {
     return NextResponse.json({ ok: true });
@@ -49,7 +55,7 @@ export async function POST(request: Request) {
   const enquiry = {
     id: crypto.randomUUID(),
     receivedAt: new Date().toISOString(),
-    status: "New",
+    status: "New" as const,
     fullName: asString(formData.get("fullName")),
     company: asString(formData.get("company")),
     email: asString(formData.get("email")),
@@ -60,8 +66,8 @@ export async function POST(request: Request) {
     message: asString(formData.get("message")),
     attachments: [] as Array<{ name: string; type: string; size: number }>,
     notification: {
-      customer: "pending_laravel",
-      staff: "pending_laravel",
+      customer: "pending",
+      staff: "pending",
     },
   };
 
@@ -111,32 +117,35 @@ export async function POST(request: Request) {
     });
   }
 
-  const laravelUrl = process.env.LARAVEL_API_URL?.trim();
-  if (laravelUrl) {
+  let saved = false;
+  try {
+    await saveEnquiry(enquiry);
+    saved = true;
     try {
-      const upstream = await fetch(`${laravelUrl.replace(/\/$/, "")}/enquiries`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: process.env.LARAVEL_API_TOKEN
-            ? `Bearer ${process.env.LARAVEL_API_TOKEN}`
-            : "",
-        },
-        body: formData,
-      });
+      await syncCustomers();
     } catch {
-      // Keep the enquiry when the Laravel API cannot be reached.
+      // Customer sync must not block the quote request.
+    }
+  } catch (error) {
+    console.error("enquiry-save-failed", error);
+  }
+
+  const staffMail = await sendNewEnquiryEmail(enquiry);
+  const customerMail = await sendCustomerEnquiryReceived(enquiry);
+  enquiry.notification = {
+    staff: staffMail,
+    customer: customerMail,
+  };
+
+  if (saved) {
+    try {
+      const { upsertEnquiry } = await import("@/lib/store/enquiries");
+      await upsertEnquiry(enquiry);
+    } catch {
+      // Notification status is best-effort.
     }
   }
 
-  try {
-    await saveEnquiry(enquiry);
-  } catch {
-    // The live host cannot keep the file. The email below is the record.
-  }
-
-  const emailed = await sendNewEnquiryEmail(enquiry);
-  await sendCustomerEnquiryReceived(enquiry);
   try {
     await notifyStaff({
       topic: "enquiries",
@@ -149,7 +158,34 @@ export async function POST(request: Request) {
     // A push failure should not stop the quote request.
   }
 
-  if (emailed === "failed") {
+  // Optional legacy upstream — never block email/save on a slow or dead API.
+  const laravelUrl = process.env.LARAVEL_API_URL?.trim();
+  if (laravelUrl) {
+    try {
+      await fetch(`${laravelUrl.replace(/\/$/, "")}/enquiries`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: process.env.LARAVEL_API_TOKEN
+            ? `Bearer ${process.env.LARAVEL_API_TOKEN}`
+            : "",
+        },
+        body: formData,
+        signal: AbortSignal.timeout(4000),
+      });
+    } catch {
+      // Keep the Next.js enquiry when the Laravel API cannot be reached.
+    }
+  }
+
+  if (staffMail === "failed" && !saved) {
+    return NextResponse.json(
+      { message: "We could not send your enquiry. Please call us and we will take the details." },
+      { status: 503 },
+    );
+  }
+
+  if (staffMail === "not_configured" && !saved) {
     return NextResponse.json(
       { message: "We could not send your enquiry. Please call us and we will take the details." },
       { status: 503 },

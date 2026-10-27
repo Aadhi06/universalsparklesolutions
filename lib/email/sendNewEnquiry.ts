@@ -47,7 +47,8 @@ export async function sendNewEnquiryEmail(enquiry: Enquiry) {
       html: lines.map((line) => `<p>${escapeHtml(line) || "&nbsp;"}</p>`).join(""),
     });
     return "sent" as const;
-  } catch {
+  } catch (error) {
+    console.error("staff-enquiry-email-failed", error);
     return "failed" as const;
   }
 }
