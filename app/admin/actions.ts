@@ -10,6 +10,10 @@ import {
 } from "@/lib/store/projects";
 import { formatVisit } from "@/lib/admin/format";
 import { notifyStaff } from "@/lib/admin/notify";
+import {
+  sendCustomerAppointmentEmail,
+  sendStaffAppointmentEmail,
+} from "@/lib/email/sendAppointment";
 import { sendCustomerEnquiryReceived } from "@/lib/email/sendNewEnquiry";
 import { sendEnquiryReplyEmail } from "@/lib/email/sendEnquiryReply";
 import {
@@ -329,6 +333,7 @@ export async function saveAppointmentAction(formData: FormData) {
   }
 
   const saved = await upsertAppointment(appointmentFromForm(formData, existing));
+  const kind = existing ? "updated" : "created";
   const changed =
     !existing ||
     existing.date !== saved.date ||
@@ -340,7 +345,18 @@ export async function saveAppointmentAction(formData: FormData) {
       title: existing ? "Appointment updated" : "New appointment",
       body: `${saved.customerName} · ${saved.phone} · ${formatVisit(saved.date, saved.time)}`,
       url: `/admin/appointments/${saved.id}`,
+      email: false,
     });
+    try {
+      await sendStaffAppointmentEmail(saved, kind);
+    } catch {
+      // Staff email is best-effort alongside push.
+    }
+    try {
+      await sendCustomerAppointmentEmail(saved, kind);
+    } catch {
+      // Customer email is best-effort.
+    }
   }
   revalidatePath("/admin");
   revalidatePath("/admin/appointments");

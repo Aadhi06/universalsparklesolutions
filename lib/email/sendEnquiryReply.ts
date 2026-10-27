@@ -1,66 +1,56 @@
-import nodemailer from "nodemailer";
 import { appOrigin } from "@/lib/admin/origin";
 import { site } from "@/lib/site";
 import { getSettings } from "@/lib/store/settings";
 import type { Enquiry } from "@/lib/store/enquiries";
+import {
+  emailDetails,
+  emailParagraphs,
+  renderEmail,
+} from "@/lib/email/template";
+import { mailConfigured, sendMail } from "@/lib/email/transport";
 
-export function mailConfigured() {
-  return Boolean(process.env.SMTP_HOST?.trim() && process.env.SMTP_FROM?.trim());
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
+export { mailConfigured };
 
 export async function sendEnquiryReplyEmail(enquiry: Enquiry, text: string) {
   if (!enquiry.replyToken || !mailConfigured()) return "not_configured" as const;
 
   const settings = await getSettings();
   const chatUrl = `${await appOrigin()}/chat/${enquiry.replyToken}`;
-  const safeText = escapeHtml(text).replaceAll("\n", "<br />");
   const subject = `Message about your ${enquiry.service} enquiry`;
 
-  try {
-    const port = Number(process.env.SMTP_PORT || 587);
-    const transport = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port,
-      secure: process.env.SMTP_SECURE === "true" || port === 465,
-      auth: process.env.SMTP_USER
-        ? {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASSWORD,
-          }
-        : undefined,
-    });
+  const plain = [
+    `Hello ${enquiry.fullName},`,
+    "",
+    text,
+    "",
+    "Open the chat to reply:",
+    chatUrl,
+    "",
+    site.shortName,
+    settings.phoneOne,
+  ].join("\n");
 
-    await transport.sendMail({
-      from: process.env.SMTP_FROM,
-      to: enquiry.email,
-      replyTo: settings.email || site.email,
-      subject,
-      text: [
-        `Hello ${enquiry.fullName},`,
-        "",
-        text,
-        "",
-        "Reply in the chat:",
-        chatUrl,
-        "",
-        site.shortName,
-        settings.phoneOne,
-      ].join("\n"),
-      html: `<p>Hello ${escapeHtml(enquiry.fullName)},</p>
-<p>${safeText}</p>
-<p><a href="${escapeHtml(chatUrl)}">Open the chat to reply</a></p>
-<p>${escapeHtml(site.shortName)}<br />${escapeHtml(settings.phoneOne)}</p>`,
-    });
-    return "sent" as const;
-  } catch {
-    return "failed" as const;
-  }
+  const html = renderEmail({
+    eyebrow: "Chat message",
+    title: "You have a reply from our team",
+    intro: `Hello ${enquiry.fullName}, Universal Sparkle Solution sent a message about your ${enquiry.service} enquiry.`,
+    preheader: text.slice(0, 120),
+    bodyHtml: `<div style="margin:0 0 18px;padding:16px 18px;border-left:4px solid #d6b66e;background:#f7fafc;border-radius:0 8px 8px 0;">
+      ${emailParagraphs(text)}
+    </div>
+    ${emailDetails([
+      { label: "Service", value: enquiry.service },
+      { label: "Suburb", value: enquiry.location },
+    ])}`,
+    cta: { label: "Open the chat to reply", href: chatUrl },
+    footerNote: `You can reply in the secure chat link. Or call ${settings.phoneOne}.`,
+  });
+
+  return sendMail({
+    to: enquiry.email,
+    replyTo: settings.email || site.email,
+    subject,
+    text: plain,
+    html,
+  });
 }

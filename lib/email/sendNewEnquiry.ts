@@ -1,22 +1,17 @@
-import nodemailer from "nodemailer";
 import { getSiteUrl, quoteSuccessMessage, site } from "@/lib/site";
 import type { Enquiry } from "@/lib/store/enquiries";
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
+import {
+  emailDetails,
+  emailParagraphs,
+  renderEmail,
+} from "@/lib/email/template";
+import { sendMail } from "@/lib/email/transport";
 
 export async function sendNewEnquiryEmail(enquiry: Enquiry) {
-  const host = process.env.SMTP_HOST?.trim();
-  const from = process.env.SMTP_FROM?.trim();
-  if (!host || !from) return "not_configured" as const;
-
-  const to = site.email;
-  const lines = [
+  const adminUrl = `${getSiteUrl()}/admin/enquiries/${enquiry.id}`;
+  const text = [
+    `New enquiry from ${enquiry.fullName}`,
+    "",
     `Name: ${enquiry.fullName}`,
     enquiry.company ? `Company: ${enquiry.company}` : "",
     `Email: ${enquiry.email}`,
@@ -26,37 +21,44 @@ export async function sendNewEnquiryEmail(enquiry: Enquiry) {
     enquiry.frequency ? `Frequency: ${enquiry.frequency}` : "",
     "",
     enquiry.message,
-  ].filter((line) => line !== "");
+    "",
+    adminUrl,
+  ]
+    .filter((line) => line !== "")
+    .join("\n");
 
-  try {
-    const port = Number(process.env.SMTP_PORT || 587);
-    const transport = nodemailer.createTransport({
-      host,
-      port,
-      secure: process.env.SMTP_SECURE === "true" || port === 465,
-      auth: process.env.SMTP_USER
-        ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
-        : undefined,
-    });
-    await transport.sendMail({
-      from,
-      to,
-      replyTo: enquiry.email,
-      subject: `New ${enquiry.service} enquiry from ${enquiry.fullName}`,
-      text: lines.join("\n"),
-      html: lines.map((line) => `<p>${escapeHtml(line) || "&nbsp;"}</p>`).join(""),
-    });
-    return "sent" as const;
-  } catch (error) {
-    console.error("staff-enquiry-email-failed", error);
-    return "failed" as const;
-  }
+  const html = renderEmail({
+    eyebrow: "New enquiry",
+    title: `${enquiry.service} request`,
+    intro: `${enquiry.fullName} sent a quote request through the website.`,
+    preheader: `New ${enquiry.service} enquiry from ${enquiry.fullName}`,
+    bodyHtml: `${emailDetails([
+      { label: "Name", value: enquiry.fullName },
+      { label: "Company", value: enquiry.company },
+      { label: "Email", value: enquiry.email, href: `mailto:${enquiry.email}` },
+      { label: "Phone", value: enquiry.phone, href: `tel:${enquiry.phone.replace(/\s+/g, "")}` },
+      { label: "Service", value: enquiry.service },
+      { label: "Location", value: enquiry.location },
+      { label: "Frequency", value: enquiry.frequency },
+    ])}
+    <div style="margin-top:18px;">
+      <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#4a5a73;font-weight:700;">Message</p>
+      ${emailParagraphs(enquiry.message)}
+    </div>`,
+    cta: { label: "Open in admin", href: adminUrl },
+  });
+
+  return sendMail({
+    to: site.email,
+    replyTo: enquiry.email,
+    subject: `New ${enquiry.service} enquiry from ${enquiry.fullName}`,
+    text,
+    html,
+  });
 }
 
 export async function sendCustomerEnquiryReceived(enquiry: Enquiry) {
-  const host = process.env.SMTP_HOST?.trim();
-  const from = process.env.SMTP_FROM?.trim();
-  if (!host || !from || !enquiry.email.includes("@")) return "not_configured" as const;
+  if (!enquiry.email.includes("@")) return "not_configured" as const;
 
   const text = [
     `Hello ${enquiry.fullName},`,
@@ -76,58 +78,45 @@ export async function sendCustomerEnquiryReceived(enquiry: Enquiry) {
     .filter((line) => line !== "")
     .join("\n");
 
-  try {
-    const port = Number(process.env.SMTP_PORT || 587);
-    const transport = nodemailer.createTransport({
-      host,
-      port,
-      secure: process.env.SMTP_SECURE === "true" || port === 465,
-      auth: process.env.SMTP_USER
-        ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
-        : undefined,
-    });
-    await transport.sendMail({
-      from,
-      to: enquiry.email,
-      replyTo: site.email,
-      subject: "We received your cleaning enquiry",
-      text,
-      html: text
-        .split("\n")
-        .map((line) => `<p>${escapeHtml(line) || "&nbsp;"}</p>`)
-        .join(""),
-    });
-    return "sent" as const;
-  } catch {
-    return "failed" as const;
-  }
+  const html = renderEmail({
+    eyebrow: "Quote request received",
+    title: "Thank you for contacting us",
+    intro: `Hello ${enquiry.fullName}, we have received your cleaning enquiry and our team will be in touch.`,
+    preheader: "We received your cleaning enquiry",
+    bodyHtml: `${emailDetails([
+      { label: "Service", value: enquiry.service },
+      { label: "Location", value: enquiry.location },
+      { label: "Frequency", value: enquiry.frequency },
+    ])}
+    <div style="margin-top:18px;">${emailParagraphs(quoteSuccessMessage)}</div>`,
+    cta: { label: "Visit our website", href: getSiteUrl() },
+    footerNote: "This is a quote request, not a confirmed booking.",
+  });
+
+  return sendMail({
+    to: enquiry.email,
+    replyTo: site.email,
+    subject: "We received your cleaning enquiry",
+    text,
+    html,
+  });
 }
 
 export async function sendAdminNotice(input: { title: string; body: string; url: string }) {
-  const host = process.env.SMTP_HOST?.trim();
-  const from = process.env.SMTP_FROM?.trim();
-  if (!host || !from) return "not_configured" as const;
-
   const link = input.url.startsWith("http") ? input.url : `${getSiteUrl()}${input.url}`;
-  try {
-    const port = Number(process.env.SMTP_PORT || 587);
-    const transport = nodemailer.createTransport({
-      host,
-      port,
-      secure: process.env.SMTP_SECURE === "true" || port === 465,
-      auth: process.env.SMTP_USER
-        ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
-        : undefined,
-    });
-    await transport.sendMail({
-      from,
-      to: site.email,
-      subject: input.title,
-      text: `${input.body}\n\n${link}`,
-      html: `<p>${escapeHtml(input.body)}</p><p><a href="${escapeHtml(link)}">Open in admin</a></p>`,
-    });
-    return "sent" as const;
-  } catch {
-    return "failed" as const;
-  }
+  const html = renderEmail({
+    eyebrow: "Admin alert",
+    title: input.title,
+    intro: input.body,
+    preheader: input.title,
+    bodyHtml: "",
+    cta: { label: "Open in admin", href: link },
+  });
+
+  return sendMail({
+    to: site.email,
+    subject: input.title,
+    text: `${input.body}\n\n${link}`,
+    html,
+  });
 }
