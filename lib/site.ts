@@ -4,7 +4,7 @@ export const site = {
   legalName: "Universal Sparkle Solution Pty Ltd",
   tagline: "Cleaning & Facility Support",
   serviceArea: "Melbourne Metropolitan Area & Regional Victoria",
-  email: "admin@universalsparklesolution.com.au",
+  email: "enquire@universalsparklesolution.com.au",
   website: "https://universalsparklesolution.com.au",
   phones: [
     { label: "0402 603 869", href: "tel:+61402603869", tracking: "0402" },

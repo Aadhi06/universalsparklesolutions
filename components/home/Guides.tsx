@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { posts } from "@/lib/blog";
+import { listPosts } from "@/lib/blog";
 import { Container } from "@/components/ui/Container";
 
 export function Guides() {
@@ -21,7 +21,7 @@ export function Guides() {
           </Link>
         </div>
         <ul className="mt-8 grid gap-5 md:grid-cols-3">
-          {posts.slice(0, 3).map((post) => (
+          {listPosts().slice(0, 3).map((post) => (
             <li key={post.slug}>
               <Link
                 href={`/blog/${post.slug}`}

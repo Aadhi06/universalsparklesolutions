@@ -38,7 +38,7 @@ export async function notifyStaff(input: {
 
   webpush.setVapidDetails(
     process.env.VAPID_SUBJECT?.trim() ||
-      "mailto:admin@universalsparklesolution.com.au",
+      "mailto:enquire@universalsparklesolution.com.au",
     publicKey,
     privateKey,
   );

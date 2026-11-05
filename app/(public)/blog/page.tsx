@@ -3,22 +3,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { Container } from "@/components/ui/Container";
-import { formatPostDate, posts } from "@/lib/blog";
+import { formatPostDate, listPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Cleaning guides for Melbourne",
   description:
-    "Practical guides to office cleaning, house cleaning, end of lease, carpet, clinic and builders cleaning across Melbourne and Regional Victoria.",
+    "Practical guides to carpet cleaning, house cleaning, office cleaning, end of lease, clinic and builders cleaning across Melbourne and Regional Victoria.",
   alternates: { canonical: "/blog" },
 };
 
 export default function BlogPage() {
+  const posts = listPosts();
   return (
     <>
       <PageIntro
         eyebrow="Guides"
         title="Cleaning guides for Melbourne workplaces and homes"
-        intro="Plain-language notes on office cleaning, house cleaning, end of lease, carpets, clinics and builders cleans across Melbourne and Regional Victoria."
+        intro="Plain-language notes on carpet cleaning, house cleaning, office cleaning, end of lease, clinics and builders cleans across Melbourne and Regional Victoria."
       />
       <section className="bg-white py-12 lg:py-16">
         <Container>

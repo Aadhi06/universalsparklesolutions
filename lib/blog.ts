@@ -18,6 +18,133 @@ export type BlogPost = {
 
 export const posts: BlogPost[] = [
   {
+    slug: "why-clean-your-carpet-melbourne",
+    title: "Why you need to clean your carpet in Melbourne",
+    description:
+      "Why carpet cleaning in Melbourne matters for homes and offices, how often to book, and what a proper carpet clean should include.",
+    published: "2026-11-05",
+    keywords: [
+      "why clean your carpet",
+      "carpet cleaning Melbourne",
+      "carpet cleaners Melbourne",
+      "professional carpet cleaning",
+    ],
+    image: "/images/service-carpet.jpg",
+    imageAlt: "A clean carpeted living area with soft natural light across the floor.",
+    serviceHref: "/services/carpet-rug-cleaning",
+    serviceLabel: "Carpet and rug cleaning",
+    sections: [
+      {
+        heading: "Carpets hold more than dust",
+        paragraphs: [
+          "Melbourne homes and offices put a lot of traffic on carpet. Shoes, pets, food spills and fine outdoor grit settle into the pile long before the carpet looks obviously dirty. Regular vacuuming helps the surface, but it does not lift what has worked into the base of the fibre.",
+          "That is why [carpet cleaning in Melbourne](/services/carpet-rug-cleaning) is not only about appearance. A planned clean reduces the build-up that can leave rooms smelling stale, darken traffic lanes, and make a space feel older than it is.",
+        ],
+      },
+      {
+        heading: "Health, comfort and first impressions",
+        paragraphs: [
+          "Carpets collect pollen, pet hair and everyday soil. People with allergies or young children notice it first. In a workplace or clinic, the carpet is part of the first impression at reception and in meeting rooms.",
+          "A professional [carpet clean](/services/carpet-rug-cleaning) lifts that load from the fibre and leaves the room fresher. It is also useful before guests arrive, before an inspection, or when a room has had a spill history that vacuuming alone cannot fix.",
+        ],
+      },
+      {
+        heading: "How often should you book carpet cleaning?",
+        paragraphs: [
+          "Most family homes do well with a thorough carpet clean every 12 to 18 months, sooner in hallways, living rooms and bedrooms used every day. Busy offices and clinics often need a shorter cycle so corridors and waiting areas stay presentable.",
+          "Loose rugs are a separate job from wall-to-wall carpet. Tell us the fibre, whether the rug can be moved, and the suburb when you enquire so the quote matches the work.",
+        ],
+      },
+      {
+        heading: "Book carpet cleaning across Melbourne",
+        paragraphs: [
+          "Universal Sparkle Solution provides [carpet cleaners in Melbourne](/services/carpet-rug-cleaning) and Regional Victoria for homes, offices and other premises. If you also need [steam furniture cleaning](/services/steam-furniture-cleaning) or a [house clean](/services/residential-house-cleaning), ask for those in the same enquiry.",
+          "[Request a free quote](/contact#quote) with your suburb, room count and photos of any stains. We will confirm what the visit can cover before any booking is made.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "how-often-house-cleaning-melbourne",
+    title: "How often should you clean your house in Melbourne?",
+    description:
+      "How often to book house cleaning in Melbourne for busy homes, including weekly, fortnightly and one-off cleans that match your routine.",
+    published: "2026-11-05",
+    keywords: [
+      "how often house cleaning",
+      "house cleaning Melbourne",
+      "regular house cleaning",
+      "home cleaners Melbourne",
+    ],
+    image: "/images/service-residential.jpg",
+    imageAlt: "A tidy Melbourne living room with a clean floor and organised seating.",
+    serviceHref: "/services/residential-house-cleaning",
+    serviceLabel: "House cleaning",
+    sections: [
+      {
+        heading: "Match the clean to how the home is used",
+        paragraphs: [
+          "There is no single right answer for every household. A small apartment with one person can look after itself with a fortnightly visit. A family home with pets, kids and a busy kitchen usually needs a shorter gap between cleans.",
+          "[House cleaning in Melbourne](/services/residential-house-cleaning) works best when the schedule matches real life: kitchens and bathrooms that stay usable, floors that do not build a sticky film, and beds that are changed on an agreed cycle.",
+        ],
+      },
+      {
+        heading: "Weekly, fortnightly or one-off",
+        paragraphs: [
+          "Weekly cleans suit homes that are used hard every day. Fortnightly cleans suit many couples and smaller households. A one-off [home cleaning](/services/residential-house-cleaning) visit is useful after guests, before a sale, or when the house has fallen behind.",
+          "The quote should list rooms, extras such as ovens or internal windows, and whether you want a repeating booking. Vague “whole house” wording leaves too much to chance.",
+        ],
+      },
+      {
+        heading: "Combine house cleaning with carpets when needed",
+        paragraphs: [
+          "Routine house cleaning keeps surfaces and floors maintained. It does not replace a periodic [carpet clean](/services/carpet-rug-cleaning) or [steam furniture clean](/services/steam-furniture-cleaning). Ask for those as separate services when traffic lanes or sofas need deeper work.",
+          "Universal Sparkle Solution quotes [house cleaners in Melbourne](/services/residential-house-cleaning) and Regional Victoria. [Tell us your suburb and preferred frequency](/contact#quote) and we will reply with a practical plan.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "why-office-cleaning-matters-melbourne",
+    title: "Why regular office cleaning matters in Melbourne",
+    description:
+      "Why Melbourne workplaces need regular office cleaning, what should be in the scope, and how a consistent commercial clean supports staff and clients.",
+    published: "2026-11-04",
+    keywords: [
+      "why office cleaning matters",
+      "office cleaning Melbourne",
+      "commercial cleaning Melbourne",
+      "workplace cleaning",
+    ],
+    image: "/images/service-commercial.jpg",
+    imageAlt: "A clean commercial office corridor ready for the working day.",
+    serviceHref: "/services/commercial-cleaning",
+    serviceLabel: "Commercial cleaning",
+    sections: [
+      {
+        heading: "A clean workplace supports the whole day",
+        paragraphs: [
+          "Staff notice sticky kitchen benches, dusty desks and tired amenities long before a manager walks the floor. Clients notice them at reception. Regular [office cleaning in Melbourne](/services/commercial-cleaning) keeps the workplace usable and presentable without interrupting trading hours.",
+          "A useful [commercial cleaning](/services/commercial-cleaning) plan covers workstations, meeting rooms, kitchens, washrooms and the paths people walk all day. Warehouses need the same clarity for floors and shared amenities.",
+        ],
+      },
+      {
+        heading: "Consistency beats a scramble clean",
+        paragraphs: [
+          "One deep clean after months of neglect costs more disruption than a steady schedule. Daily or several-times-weekly visits keep high-touch points under control. Weekly visits can work for quieter sites if the scope is clear.",
+          "Name the areas that matter: door handles, taps, kitchen benches, glass partitions and reception counters. Those are the details that show whether the clean is thorough or only a quick tidy.",
+        ],
+      },
+      {
+        heading: "Get a commercial cleaning quote",
+        paragraphs: [
+          "Share the suburb, floor area, access hours and whether the clean is before open, after close, or split across the day. That is enough for a practical quote.",
+          "Universal Sparkle Solution provides [office cleaners in Melbourne](/services/commercial-cleaning) and Regional Victoria. [Request a free quote](/contact#quote) and we will confirm the rooms, frequency and timing before work starts.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "office-cleaning-melbourne",
     title: "Office cleaning in Melbourne: what a workplace clean should cover",
     description:
@@ -256,6 +383,10 @@ export const posts: BlogPost[] = [
 
 export function getPost(slug: string) {
   return posts.find((post) => post.slug === slug);
+}
+
+export function listPosts() {
+  return [...posts].sort((a, b) => b.published.localeCompare(a.published));
 }
 
 export function formatPostDate(value: string) {

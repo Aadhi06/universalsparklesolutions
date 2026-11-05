@@ -77,7 +77,10 @@ export async function getRuntimeContacts() {
     legalName: site.legalName,
     tagline: site.tagline,
     serviceArea: settings.serviceArea,
-    email: settings.email,
+    email:
+      settings.email.trim().toLowerCase() === "admin@universalsparklesolution.com.au"
+        ? site.email
+        : settings.email || site.email,
     website: site.website,
     phones,
     primaryPhone: { label: primary.label, href: primary.href },
@@ -93,6 +96,8 @@ export type RuntimeContacts = Awaited<ReturnType<typeof getRuntimeContacts>>;
 
 export type PublicContacts = {
   name: string;
+  shortName: string;
+  legalName: string;
   email: string;
   serviceArea: string;
   phones: readonly { label: string; href: string }[];
