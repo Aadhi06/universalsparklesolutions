@@ -19,7 +19,7 @@ export default function ServicesPage() {
       <PageIntro
         eyebrow="Services"
         title="Cleaning for workplaces, homes and specialist interiors"
-        intro="Choose the service that matches the premises. Each visit is quoted for the rooms, access and timing you need."
+        intro="Choose the service that matches the premises. Each visit is quoted for the rooms, access and timing you need. See indicative residential starting prices on our pricing guide."
       />
       {serviceGroups.map((group, index) => {
         const items = servicesByGroup(group.id);

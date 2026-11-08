@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CurrentWork } from "@/components/home/CurrentWork";
 import { Guides } from "@/components/home/Guides";
 import { Hero } from "@/components/home/Hero";
+import { Pricing } from "@/components/home/Pricing";
 import { Process } from "@/components/home/Process";
 import { Quote } from "@/components/home/Quote";
 import { Services } from "@/components/home/Services";
@@ -28,6 +29,7 @@ export default function HomePage() {
       <Hero />
       <StandardsStrip />
       <Services />
+      <Pricing />
       <CurrentWork />
       <Process />
       <Guides />

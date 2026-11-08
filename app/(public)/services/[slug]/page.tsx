@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { PageIntro } from "@/components/layout/PageIntro";
+import { ServicePricing } from "@/components/pricing/ServicePricing";
 import { services } from "@/lib/site";
 
 type ServicePageProps = {
@@ -74,13 +75,14 @@ export default async function ServicePage({ params }: ServicePageProps) {
               <ButtonLink href="/contact#quote" className="w-full sm:w-auto">
                 Request a Free Quote
               </ButtonLink>
-              <ButtonLink href="/services" variant="secondary" className="w-full sm:w-auto">
-                View all services
+              <ButtonLink href="/pricing" variant="secondary" className="w-full sm:w-auto">
+                View pricing guide
               </ButtonLink>
             </div>
           </div>
         </Container>
       </section>
+      <ServicePricing slug={service.slug} />
       <section className="bg-surface py-12 sm:py-16">
         <Container className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
           <div className="relative aspect-[16/11] overflow-hidden rounded-[6px]">

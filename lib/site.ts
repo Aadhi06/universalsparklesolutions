@@ -35,6 +35,7 @@ export const navigation = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
   { href: "/services", label: "Services", hasServiceMenu: true },
+  { href: "/pricing", label: "Pricing" },
   { href: "/#current-work", label: "Our Work" },
   { href: "/blog", label: "Guides" },
   { href: "/contact", label: "Contact" },
@@ -546,6 +547,248 @@ export const projects: Project[] = [
   },
 ];
 
+export const pricingDisclaimer =
+  "Starting prices are indicative for standard, unfurnished, single-storey residential work across Melbourne and Regional Victoria. Final pricing is confirmed after we review property size, condition, access and inclusions. Unless noted otherwise, figures are plus GST. A quote request is not a confirmed booking.";
+
+export const pricingPackages = [
+  {
+    id: "end-of-lease",
+    serviceSlug: "end-of-lease-cleaning",
+    title: "End of Lease Cleaning",
+    fromPrice: "$369",
+    priceNote: "From 1 bedroom",
+    summary:
+      "Presentation-ready cleaning before vacancy inspection. Scope is agreed before the visit; cleaning supports handover and does not itself guarantee a bond refund.",
+    highlights: [
+      "Kitchens, bathrooms, floors and built-in appliances as agreed",
+      "Bedroom-based starting guide below",
+      "Optional carpet, windows and extras quoted separately",
+    ],
+  },
+  {
+    id: "deep-clean",
+    serviceSlug: "residential-house-cleaning",
+    title: "Deep / One-Off House Clean",
+    fromPrice: "$249",
+    priceNote: "From 3 cleaner-hours",
+    summary:
+      "A thorough one-off reset for spring cleans, move-ins or homes that need more than a routine visit. Time-based — extra hours only with your approval.",
+    highlights: [
+      "Minimum booking typically 3 hours",
+      "Additional time from about $66 per cleaner-hour",
+      "Priorities agreed before the team arrives",
+    ],
+  },
+  {
+    id: "general-home",
+    serviceSlug: "residential-house-cleaning",
+    title: "General House Cleaning",
+    fromPrice: "$99",
+    priceNote: "From 2 hours",
+    summary:
+      "Regular or one-off house cleaning for living areas, kitchens, bathrooms and bedrooms. Recurring weekly or fortnightly visits can be quoted at a steadier rate.",
+    highlights: [
+      "Indicative starting rate for smaller homes",
+      "Weekly and fortnightly plans available",
+      "Extras such as ovens or windows on request",
+    ],
+  },
+  {
+    id: "builders",
+    serviceSlug: "construction-builders-cleaning",
+    title: "Builders / Post-Renovation",
+    fromPrice: "$380",
+    priceNote: "From smaller completed jobs",
+    summary:
+      "Detailed cleaning after renovations, fit-outs or completed builds before inspection and handover. Larger new builds and commercial fit-outs are quoted after assessment.",
+    highlights: [
+      "Suitable smaller jobs from about 4 cleaner-hours",
+      "Extra time only added with your approval",
+      "Glass, carpet and specialist residue quoted separately",
+    ],
+  },
+] as const;
+
+export const endOfLeaseRates = [
+  {
+    label: "1 bedroom",
+    price: "From $369",
+    note: "1 bath, kitchen, living",
+  },
+  {
+    label: "2 bedrooms",
+    price: "From $399",
+    note: "Most common property size",
+  },
+  {
+    label: "3 bedrooms",
+    price: "From $499",
+    note: "Bath, kitchen, living",
+  },
+  {
+    label: "4 bedrooms",
+    price: "From $599",
+    note: "Bath, kitchen, living",
+  },
+] as const;
+
+export const houseCleaningRates = [
+  {
+    label: "General clean starting rate",
+    price: "From $99",
+    note: "Typically from 2 hours",
+  },
+  {
+    label: "Deep / one-off minimum",
+    price: "From $249",
+    note: "Typically from 3 cleaner-hours",
+  },
+  {
+    label: "Additional cleaner-hour",
+    price: "From $66",
+    note: "Only with your approval",
+  },
+  {
+    label: "Regular bookings",
+    price: "Quote",
+    note: "Weekly or fortnightly plans available",
+  },
+] as const;
+
+export const buildersCleaningRates = [
+  {
+    label: "Smaller post-renovation cleans",
+    price: "From $380",
+    note: "Up to about 4 cleaner-hours after assessment",
+  },
+  {
+    label: "Additional cleaner-hour",
+    price: "From $80",
+    note: "Only with your approval",
+  },
+  {
+    label: "Larger homes, new builds & commercial",
+    price: "POA",
+    note: "Quoted after photos or site review",
+  },
+] as const;
+
+export const pricingAddOns = [
+  {
+    label: "Carpet steam clean — living / hall",
+    price: "From $100",
+  },
+  {
+    label: "Carpet steam clean — per bedroom",
+    price: "From $55",
+  },
+  {
+    label: "Fridge cleaning",
+    price: "From $35",
+  },
+  {
+    label: "Inside window cleaning",
+    price: "From $65–$150",
+  },
+  {
+    label: "Wet wipe blinds (per blind)",
+    price: "From $29",
+  },
+  {
+    label: "Balcony / patio clean",
+    price: "From $60–$100",
+  },
+  {
+    label: "Clean walls (per wall)",
+    price: "From $29",
+  },
+  {
+    label: "Garage clean",
+    price: "From $50",
+  },
+] as const;
+
+export const commercialPricingNotes = [
+  {
+    title: "Commercial & offices",
+    text: "Scheduled office and warehouse cleaning is quoted for floor area, hours of access and frequency. Request a plan for daily, weekly or custom visits.",
+    href: "/services/commercial-cleaning",
+  },
+  {
+    title: "Medical & education",
+    text: "Clinics, allied health and schools are scoped around consulting rooms, classrooms, amenities and high-touch surfaces. Pricing follows the agreed routine.",
+    href: "/services/medical-healthcare-cleaning",
+  },
+  {
+    title: "Carpet, furniture, glass & childcare",
+    text: "Specialist work is priced for the rooms, fibre or glazing involved. These can be booked alone or alongside a house, lease or commercial clean.",
+    href: "/services/carpet-rug-cleaning",
+  },
+] as const;
+
+export type ServicePricingBlock = {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  rows: readonly { label: string; price: string; note?: string }[];
+  footnote?: string;
+};
+
+export const servicePricingBySlug: Record<string, ServicePricingBlock> = {
+  "end-of-lease-cleaning": {
+    eyebrow: "Indicative pricing",
+    title: "End of lease starting prices",
+    intro:
+      "Bedroom-based guide for standard unfurnished homes. Extra bathrooms, furnished properties, multi-storey layouts and carpets change the quote.",
+    rows: endOfLeaseRates,
+    footnote:
+      "Cleaning prepares the property for inspection. It does not replace the inspection or grant a bond refund. Final price confirmed before booking.",
+  },
+  "residential-house-cleaning": {
+    eyebrow: "Indicative pricing",
+    title: "House cleaning starting prices",
+    intro:
+      "General cleans start from a two-hour visit. Deeper one-off work is usually quoted from a three-hour minimum, with extra time only if you approve it.",
+    rows: houseCleaningRates,
+    footnote:
+      "Recurring weekly or fortnightly visits can be quoted at a steadier rate once we know the rooms and suburb.",
+  },
+  "construction-builders-cleaning": {
+    eyebrow: "Indicative pricing",
+    title: "Builders & post-renovation starting prices",
+    intro:
+      "Smaller completed renovations can start from about four cleaner-hours. New builds, large homes and commercial fit-outs are assessed individually.",
+    rows: buildersCleaningRates,
+    footnote:
+      "Cleaning supports handover presentation. It does not replace building certification or an occupancy permit.",
+  },
+  "carpet-rug-cleaning": {
+    eyebrow: "Indicative pricing",
+    title: "Carpet cleaning starting prices",
+    intro:
+      "Carpet steam cleaning is often booked with an end of lease or house clean. Loose rugs and heavily soiled areas are quoted separately.",
+    rows: [
+      {
+        label: "Living area / hallway",
+        price: "From $100",
+        note: "Steam clean guide",
+      },
+      {
+        label: "Per bedroom",
+        price: "From $55",
+        note: "Steam clean guide",
+      },
+      {
+        label: "Whole-home or commercial carpet",
+        price: "POA",
+        note: "Room count and fibre assessed",
+      },
+    ],
+    footnote:
+      "Method and drying time depend on the fibre and soiling. Steam furniture cleaning is a separate service.",
+  },
+};
+
 export const faqs = [
   {
     question: "Which areas do you service?",
@@ -556,6 +799,11 @@ export const faqs = [
     question: "What types of premises do you clean?",
     answer:
       "We clean workplaces, homes and specialist interiors. That includes offices, clinics, schools, childcare centres, completed builds, house cleaning, end of lease, carpets, steam furniture, glass, ceilings and last-minute visits. Routine cleaning in NDIS homes is available as a residential service.",
+  },
+  {
+    question: "How much does cleaning cost?",
+    answer:
+      "Indicative residential starting prices are published on our pricing page — for example end of lease from $369, general house cleaning from $99, deep cleans from $249, and smaller builders cleans from $380. Commercial, medical and specialist work is quoted for the site. Every figure is a starting guide; the confirmed quote follows property size, condition and inclusions.",
   },
   {
     question: "How do I request a quote?",

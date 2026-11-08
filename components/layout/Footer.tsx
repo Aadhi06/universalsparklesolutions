@@ -10,6 +10,7 @@ const primaryServices = services.slice(0, 6);
 const companyLinks = [
   { href: "/about", label: "About us" },
   { href: "/services", label: "All services" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/blog", label: "Cleaning guides" },
   { href: "/contact", label: "Request a quote" },
   { href: "/privacy-policy", label: "Privacy policy" },

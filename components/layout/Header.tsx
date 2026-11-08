@@ -126,13 +126,22 @@ export function Header({ contacts = site }: { contacts?: PublicContacts }) {
                           </div>
                         ))}
                       </div>
-                      <Link
-                        href="/services"
-                        onClick={closeMenus}
-                        className="mt-4 inline-flex min-h-11 items-center font-semibold text-blue"
-                      >
-                        View all services
-                      </Link>
+                      <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1">
+                        <Link
+                          href="/services"
+                          onClick={closeMenus}
+                          className="inline-flex min-h-11 items-center font-semibold text-blue"
+                        >
+                          View all services
+                        </Link>
+                        <Link
+                          href="/pricing"
+                          onClick={closeMenus}
+                          className="inline-flex min-h-11 items-center font-semibold text-blue"
+                        >
+                          Pricing guide
+                        </Link>
+                      </div>
                     </div>
                   ) : null}
                 </div>
