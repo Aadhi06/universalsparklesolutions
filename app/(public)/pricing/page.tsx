@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { FAQ } from "@/components/home/FAQ";
@@ -71,42 +72,53 @@ export default function PricingPage() {
             {pricingPackages.map((item) => (
               <article
                 key={item.id}
-                className="rounded-[6px] border border-line bg-surface p-5 sm:p-7"
+                className="overflow-hidden rounded-[6px] border border-line bg-surface"
               >
-                <div className="flex flex-wrap items-end justify-between gap-3">
-                  <h2 className="font-display text-[1.25rem] font-semibold text-navy sm:text-[1.4rem]">
-                    {item.title}
-                  </h2>
-                  <div className="text-right">
-                    <p className="font-display text-[1.75rem] font-semibold tracking-[-0.03em] text-blue">
-                      {item.fromPrice}
-                    </p>
-                    <p className="text-[0.88rem] text-muted">{item.priceNote}</p>
-                  </div>
+                <div className="relative aspect-[16/9] bg-white">
+                  <Image
+                    src={item.image}
+                    alt={item.imageAlt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 560px"
+                    className="object-cover"
+                  />
                 </div>
-                <p className="mt-4 leading-relaxed text-body">{item.summary}</p>
-                <ul className="mt-5 space-y-2.5">
-                  {item.highlights.map((point) => (
-                    <li key={point} className="flex gap-3 text-body">
-                      <span className="mt-2 size-1.5 shrink-0 rounded-full bg-gold" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-                  <ButtonLink
-                    href="/contact#quote"
-                    className="w-full sm:w-auto"
-                  >
-                    Request a Free Quote
-                  </ButtonLink>
-                  <Link
-                    href={`/services/${item.serviceSlug}`}
-                    className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-blue"
-                  >
-                    Service details
-                    <ArrowRight className="size-4" />
-                  </Link>
+                <div className="p-5 sm:p-7">
+                  <div className="flex flex-wrap items-end justify-between gap-3">
+                    <h2 className="font-display text-[1.25rem] font-semibold text-navy sm:text-[1.4rem]">
+                      {item.title}
+                    </h2>
+                    <div className="text-right">
+                      <p className="font-display text-[1.75rem] font-semibold tracking-[-0.03em] text-blue">
+                        {item.fromPrice}
+                      </p>
+                      <p className="text-[0.88rem] text-muted">{item.priceNote}</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 leading-relaxed text-body">{item.summary}</p>
+                  <ul className="mt-5 space-y-2.5">
+                    {item.highlights.map((point) => (
+                      <li key={point} className="flex gap-3 text-body">
+                        <span className="mt-2 size-1.5 shrink-0 rounded-full bg-gold" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <ButtonLink
+                      href="/contact#quote"
+                      className="w-full sm:w-auto"
+                    >
+                      Request a Free Quote
+                    </ButtonLink>
+                    <Link
+                      href={`/services/${item.serviceSlug}`}
+                      className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-blue"
+                    >
+                      Service details
+                      <ArrowRight className="size-4" />
+                    </Link>
+                  </div>
                 </div>
               </article>
             ))}
@@ -193,21 +205,32 @@ export default function PricingPage() {
             {commercialPricingNotes.map((item) => (
               <article
                 key={item.title}
-                className="rounded-[6px] border border-line bg-white p-5 sm:p-6"
+                className="overflow-hidden rounded-[6px] border border-line bg-white"
               >
-                <h3 className="font-display text-[1.1rem] font-semibold text-navy">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-[0.98rem] leading-relaxed text-body">
-                  {item.text}
-                </p>
-                <Link
-                  href={item.href}
-                  className="mt-5 inline-flex min-h-11 items-center gap-1.5 font-semibold text-blue"
-                >
-                  Learn more
-                  <ArrowRight className="size-4" />
-                </Link>
+                <div className="relative aspect-[16/10] bg-surface">
+                  <Image
+                    src={item.image}
+                    alt={item.imageAlt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 360px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-5 sm:p-6">
+                  <h3 className="font-display text-[1.1rem] font-semibold text-navy">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-[0.98rem] leading-relaxed text-body">
+                    {item.text}
+                  </p>
+                  <Link
+                    href={item.href}
+                    className="mt-5 inline-flex min-h-11 items-center gap-1.5 font-semibold text-blue"
+                  >
+                    Learn more
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </div>
               </article>
             ))}
           </div>

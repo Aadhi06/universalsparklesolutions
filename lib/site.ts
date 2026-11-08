@@ -557,6 +557,9 @@ export const pricingPackages = [
     title: "End of Lease Cleaning",
     fromPrice: "$369",
     priceNote: "From 1 bedroom",
+    image: "/images/service-end-of-lease.jpg",
+    imageAlt:
+      "A clean, unoccupied apartment living area ready for vacancy inspection.",
     summary:
       "Presentation-ready cleaning before vacancy inspection. Scope is agreed before the visit; cleaning supports handover and does not itself guarantee a bond refund.",
     highlights: [
@@ -571,6 +574,9 @@ export const pricingPackages = [
     title: "Deep / One-Off House Clean",
     fromPrice: "$249",
     priceNote: "From 3 cleaner-hours",
+    image: "/images/env-amenities.jpg",
+    imageAlt:
+      "A clean bathroom with a glass shower and vanity, representing a thorough one-off house clean.",
     summary:
       "A thorough one-off reset for spring cleans, move-ins or homes that need more than a routine visit. Time-based — extra hours only with your approval.",
     highlights: [
@@ -585,6 +591,9 @@ export const pricingPackages = [
     title: "General House Cleaning",
     fromPrice: "$99",
     priceNote: "From 2 hours",
+    image: "/images/service-residential.jpg",
+    imageAlt:
+      "A bright, tidy living room with a sofa and timber floors, representing general house cleaning.",
     summary:
       "Regular or one-off house cleaning for living areas, kitchens, bathrooms and bedrooms. Recurring weekly or fortnightly visits can be quoted at a steadier rate.",
     highlights: [
@@ -599,6 +608,9 @@ export const pricingPackages = [
     title: "Builders / Post-Renovation",
     fromPrice: "$380",
     priceNote: "From smaller completed jobs",
+    image: "/images/service-builders.jpg",
+    imageAlt:
+      "A completed modern home interior with clean floors and joinery ready for handover.",
     summary:
       "Detailed cleaning after renovations, fit-outs or completed builds before inspection and handover. Larger new builds and commercial fit-outs are quoted after assessment.",
     highlights: [
@@ -713,16 +725,25 @@ export const commercialPricingNotes = [
     title: "Commercial & offices",
     text: "Scheduled office and warehouse cleaning is quoted for floor area, hours of access and frequency. Request a plan for daily, weekly or custom visits.",
     href: "/services/commercial-cleaning",
+    image: "/images/service-commercial.jpg",
+    imageAlt:
+      "A bright commercial office corridor with glass-fronted rooms and a polished floor.",
   },
   {
     title: "Medical & education",
     text: "Clinics, allied health and schools are scoped around consulting rooms, classrooms, amenities and high-touch surfaces. Pricing follows the agreed routine.",
     href: "/services/medical-healthcare-cleaning",
+    image: "/images/env-clinic.jpg",
+    imageAlt:
+      "A clean healthcare reception desk and corridor representing medical and education facility cleaning.",
   },
   {
     title: "Carpet, furniture, glass & childcare",
     text: "Specialist work is priced for the rooms, fibre or glazing involved. These can be booked alone or alongside a house, lease or commercial clean.",
     href: "/services/carpet-rug-cleaning",
+    image: "/images/service-carpet.jpg",
+    imageAlt:
+      "A living room with a large rug and seating, representing carpet and specialist cleaning.",
   },
 ] as const;
 
@@ -730,6 +751,8 @@ export type ServicePricingBlock = {
   eyebrow: string;
   title: string;
   intro: string;
+  image: string;
+  imageAlt: string;
   rows: readonly { label: string; price: string; note?: string }[];
   footnote?: string;
 };
@@ -740,6 +763,9 @@ export const servicePricingBySlug: Record<string, ServicePricingBlock> = {
     title: "End of lease starting prices",
     intro:
       "Bedroom-based guide for standard unfurnished homes. Extra bathrooms, furnished properties, multi-storey layouts and carpets change the quote.",
+    image: "/images/service-end-of-lease.jpg",
+    imageAlt:
+      "A clean, unoccupied apartment living area ready for vacancy inspection.",
     rows: endOfLeaseRates,
     footnote:
       "Cleaning prepares the property for inspection. It does not replace the inspection or grant a bond refund. Final price confirmed before booking.",
@@ -749,6 +775,9 @@ export const servicePricingBySlug: Record<string, ServicePricingBlock> = {
     title: "House cleaning starting prices",
     intro:
       "General cleans start from a two-hour visit. Deeper one-off work is usually quoted from a three-hour minimum, with extra time only if you approve it.",
+    image: "/images/service-residential.jpg",
+    imageAlt:
+      "A bright, tidy living room representing residential house cleaning.",
     rows: houseCleaningRates,
     footnote:
       "Recurring weekly or fortnightly visits can be quoted at a steadier rate once we know the rooms and suburb.",
@@ -758,6 +787,9 @@ export const servicePricingBySlug: Record<string, ServicePricingBlock> = {
     title: "Builders & post-renovation starting prices",
     intro:
       "Smaller completed renovations can start from about four cleaner-hours. New builds, large homes and commercial fit-outs are assessed individually.",
+    image: "/images/service-builders.jpg",
+    imageAlt:
+      "A completed modern home interior ready for builders cleaning and handover.",
     rows: buildersCleaningRates,
     footnote:
       "Cleaning supports handover presentation. It does not replace building certification or an occupancy permit.",
@@ -767,6 +799,9 @@ export const servicePricingBySlug: Record<string, ServicePricingBlock> = {
     title: "Carpet cleaning starting prices",
     intro:
       "Carpet steam cleaning is often booked with an end of lease or house clean. Loose rugs and heavily soiled areas are quoted separately.",
+    image: "/images/service-carpet.jpg",
+    imageAlt:
+      "A living room with a large rug, representing carpet and rug cleaning.",
     rows: [
       {
         label: "Living area / hallway",

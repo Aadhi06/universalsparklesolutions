@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
@@ -18,25 +19,36 @@ export function Pricing() {
           {pricingPackages.map((item) => (
             <article
               key={item.id}
-              className="flex flex-col rounded-[6px] border border-line bg-white p-5 sm:p-6"
+              className="flex flex-col overflow-hidden rounded-[6px] border border-line bg-white"
             >
-              <h3 className="font-display text-[1.08rem] font-semibold text-navy sm:text-[1.15rem]">
-                {item.title}
-              </h3>
-              <p className="mt-4 font-display text-[1.85rem] font-semibold tracking-[-0.03em] text-blue">
-                {item.fromPrice}
-              </p>
-              <p className="mt-1 text-[0.88rem] text-muted">{item.priceNote}</p>
-              <p className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-body">
-                {item.summary}
-              </p>
-              <Link
-                href={`/services/${item.serviceSlug}`}
-                className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-[0.95rem] font-semibold text-blue"
-              >
-                View service
-                <ArrowRight className="size-4" />
-              </Link>
+              <div className="relative aspect-[16/10] bg-surface">
+                <Image
+                  src={item.image}
+                  alt={item.imageAlt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-5 sm:p-6">
+                <h3 className="font-display text-[1.08rem] font-semibold text-navy sm:text-[1.15rem]">
+                  {item.title}
+                </h3>
+                <p className="mt-4 font-display text-[1.85rem] font-semibold tracking-[-0.03em] text-blue">
+                  {item.fromPrice}
+                </p>
+                <p className="mt-1 text-[0.88rem] text-muted">{item.priceNote}</p>
+                <p className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-body">
+                  {item.summary}
+                </p>
+                <Link
+                  href={`/services/${item.serviceSlug}`}
+                  className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-[0.95rem] font-semibold text-blue"
+                >
+                  View service
+                  <ArrowRight className="size-4" />
+                </Link>
+              </div>
             </article>
           ))}
         </div>
