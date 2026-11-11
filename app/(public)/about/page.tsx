@@ -4,7 +4,13 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { aboutPoints, environments, processSteps, site } from "@/lib/site";
+import {
+  aboutPoints,
+  environments,
+  formatSiteAddress,
+  processSteps,
+  site,
+} from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -37,10 +43,10 @@ export default function AboutPage() {
               How we work
             </h2>
             <p className="mt-4 leading-relaxed text-body">
-              The company focuses on consistent, high-quality cleaning across
-              different industries. We agree a cleaning plan for each
-              premises, then deliver that plan with inspections and reporting
-              where the work requires it.
+              Based at {formatSiteAddress()}, the company focuses on
+              consistent, high-quality cleaning across different industries. We
+              agree a cleaning plan for each premises, then deliver that plan
+              with inspections and reporting where the work requires it.
             </p>
             <p className="mt-4 leading-relaxed text-body">
               Workplaces remain a core part of the company. House cleaning, end

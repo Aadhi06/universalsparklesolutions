@@ -3,13 +3,14 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { PhoneLink } from "@/components/analytics/PhoneLink";
 import { Container } from "@/components/ui/Container";
-import { services, site } from "@/lib/site";
+import { formatSiteAddress, services, site } from "@/lib/site";
 import type { PublicContacts } from "@/lib/store/settings";
 
 const primaryServices = services.slice(0, 6);
 const companyLinks = [
   { href: "/about", label: "About us" },
   { href: "/services", label: "All services" },
+  { href: "/locations", label: "Service areas" },
   { href: "/pricing", label: "Pricing" },
   { href: "/blog", label: "Cleaning guides" },
   { href: "/contact", label: "Request a quote" },
@@ -122,7 +123,12 @@ export function Footer({ contacts = site }: { contacts?: PublicContacts }) {
             </li>
             <li className="flex items-start gap-2 text-white/80">
               <MapPin className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
-              <span>{contacts.serviceArea}</span>
+              <span>
+                {formatSiteAddress(contacts.address)}
+                <span className="mt-1 block text-white/65">
+                  Serving {contacts.serviceArea}
+                </span>
+              </span>
             </li>
           </ul>
         </div>

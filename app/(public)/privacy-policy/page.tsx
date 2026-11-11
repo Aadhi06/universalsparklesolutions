@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { site } from "@/lib/site";
+import { formatSiteAddress, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -13,8 +13,8 @@ const sections = [
   {
     title: "Who we are",
     paragraphs: [
-      `${site.name} (“we”, “us”) operates ${site.website} and provides cleaning and facility support across ${site.serviceArea}.`,
-      `You can contact us about privacy at ${site.email} or by calling ${site.phones[0].label}.`,
+      `${site.name} (“we”, “us”) operates ${site.website} and provides cleaning and facility support across ${site.serviceArea}. Our postal address is ${formatSiteAddress()}.`,
+      `You can contact us about privacy at ${site.email}, by calling ${site.phones[0].label}, or by writing to ${formatSiteAddress()}.`,
     ],
   },
   {

@@ -6,6 +6,14 @@ export const site = {
   serviceArea: "Melbourne Metropolitan Area & Regional Victoria",
   email: "enquire@universalsparklesolution.com.au",
   website: "https://universalsparklesolution.com.au",
+  address: {
+    streetAddress: "17 Arrowsmith Street",
+    addressLocality: "Tarneit",
+    addressRegion: "VIC",
+    addressRegionFull: "Victoria",
+    postalCode: "3029",
+    addressCountry: "AU",
+  },
   phones: [
     { label: "0402 603 869", href: "tel:+61402603869", tracking: "0402" },
     { label: "0433 708 709", href: "tel:+61433708709", tracking: "0433" },
@@ -17,6 +25,16 @@ export const site = {
     numberLabel: "0402 603 869",
   },
 } as const;
+
+/** Single-line NAP address for footers, contact and legal pages. */
+export function formatSiteAddress(
+  address: typeof site.address = site.address,
+  style: "full" | "short" = "full",
+) {
+  const region =
+    style === "full" ? address.addressRegionFull : address.addressRegion;
+  return `${address.streetAddress}, ${address.addressLocality}, ${region} ${address.postalCode}`;
+}
 
 export function getSiteUrl() {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -828,7 +846,7 @@ export const faqs = [
   {
     question: "Which areas do you service?",
     answer:
-      "We provide cleaning services throughout Melbourne Metropolitan Area and Regional Victoria. Contact the team to discuss your location and requirements.",
+      "We provide cleaning services throughout Melbourne Metropolitan Area and Regional Victoria. We are based in Tarneit and have strong coverage across western Melbourne, including Point Cook, Williams Landing, Truganina, Werribee, Hoppers Crossing, Altona, Altona North, Altona Meadows, Williamstown, North Melbourne, Footscray and Maribyrnong. Contact the team to discuss your location and requirements.",
   },
   {
     question: "What types of premises do you clean?",

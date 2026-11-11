@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { site } from "@/lib/site";
+import { formatSiteAddress, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions",
@@ -15,7 +15,7 @@ const sections = [
     title: "About these terms",
     paragraphs: [
       `These terms apply when you use ${site.website}, request a quote, or communicate with ${site.name} through this website.`,
-      `The website is published by ${site.name} to describe cleaning and facility support services across ${site.serviceArea}.`,
+      `The website is published by ${site.name} (postal address: ${formatSiteAddress()}) to describe cleaning and facility support services across ${site.serviceArea}.`,
     ],
   },
   {

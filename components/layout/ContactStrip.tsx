@@ -10,8 +10,10 @@ export function ContactStrip({ contacts = site }: { contacts?: PublicContacts })
       <Container className="flex min-h-10 items-center justify-between gap-4 py-2 text-[0.8rem] leading-none sm:min-h-11">
         <p className="flex min-w-0 items-center gap-2 font-medium tracking-[0.01em]">
           <MapPin className="hidden size-3.5 shrink-0 text-gold sm:block" aria-hidden />
-          <span className="sm:hidden">Melbourne & Regional Victoria</span>
-          <span className="hidden sm:inline">Serving {contacts.serviceArea}</span>
+          <span className="sm:hidden">Tarneit · Melbourne west</span>
+          <span className="hidden sm:inline">
+            Based in Tarneit · Serving {contacts.serviceArea}
+          </span>
         </p>
         <div className="hidden items-center gap-5 md:flex">
           {contacts.phones.map((phone) => (

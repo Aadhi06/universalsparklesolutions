@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { posts } from "@/lib/blog";
+import { locations } from "@/lib/locations";
 import { getSiteUrl, services } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages = [
     { path: "", frequency: "weekly" as const, priority: 1 },
     { path: "/services", frequency: "weekly" as const, priority: 0.9 },
+    { path: "/locations", frequency: "weekly" as const, priority: 0.85 },
     { path: "/pricing", frequency: "weekly" as const, priority: 0.85 },
     { path: "/blog", frequency: "weekly" as const, priority: 0.8 },
     { path: "/about", frequency: "monthly" as const, priority: 0.7 },
@@ -29,6 +31,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const locationPages: MetadataRoute.Sitemap = locations.map((location) => ({
+    url: `${base}/locations/${location.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.75,
+  }));
+
   const guidePages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${base}/blog/${post.slug}`,
     lastModified: new Date(`${post.published}T00:00:00+11:00`),
@@ -36,5 +45,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...pages, ...servicePages, ...guidePages];
+  return [...pages, ...servicePages, ...locationPages, ...guidePages];
 }

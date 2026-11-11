@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Quote } from "@/components/home/Quote";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { Container } from "@/components/ui/Container";
-import { site } from "@/lib/site";
+import { formatSiteAddress, site } from "@/lib/site";
 import { getRuntimeContacts } from "@/lib/store/settings";
 
 export const metadata: Metadata = {
@@ -38,8 +38,9 @@ export default async function ContactPage() {
               How to reach us
             </h2>
             <p className="mt-4 leading-relaxed text-body">
-              The team works across {contacts.serviceArea}. Tell us the premises
-              type, suburb or postcode, and the service you need.
+              We are based at {formatSiteAddress(contacts.address)} and work
+              across {contacts.serviceArea}. Tell us the premises type, suburb
+              or postcode, and the service you need.
             </p>
             <ul className="mt-6 space-y-3 font-medium text-navy">
               <li>
@@ -48,6 +49,7 @@ export default async function ContactPage() {
               </li>
               <li>WhatsApp {contacts.whatsapp.numberLabel}</li>
               <li className="break-all">{contacts.email}</li>
+              <li>{formatSiteAddress(contacts.address)}</li>
             </ul>
           </div>
         </Container>

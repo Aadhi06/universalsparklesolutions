@@ -128,6 +128,7 @@ export function renderEmail(input: {
             <td style="background:${NAVY};border-radius:0 0 10px 10px;padding:20px 24px;">
               <p style="margin:0;font-size:14px;line-height:1.5;color:${WHITE};font-weight:700;">${escapeHtml(site.shortName)}</p>
               <p style="margin:8px 0 0;font-size:13px;line-height:1.5;color:#c9d6e8;">
+                ${escapeHtml(`${site.address.streetAddress}, ${site.address.addressLocality} ${site.address.addressRegion} ${site.address.postalCode}`)}<br />
                 ${escapeHtml(site.serviceArea)}<br />
                 <a href="mailto:${escapeHtml(site.email)}" style="color:${GOLD};text-decoration:none;">${escapeHtml(site.email)}</a><br />
                 ${escapeHtml(phones)}

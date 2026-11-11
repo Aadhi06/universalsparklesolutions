@@ -5,6 +5,7 @@ import { Hero } from "@/components/home/Hero";
 import { Pricing } from "@/components/home/Pricing";
 import { Process } from "@/components/home/Process";
 import { Quote } from "@/components/home/Quote";
+import { ServiceArea } from "@/components/home/ServiceArea";
 import { Services } from "@/components/home/Services";
 import { StandardsStrip } from "@/components/home/StandardsStrip";
 import { getSettings } from "@/lib/store/settings";
@@ -33,6 +34,7 @@ export default function HomePage() {
       <CurrentWork />
       <Process />
       <Guides />
+      <ServiceArea />
       <Quote />
     </>
   );

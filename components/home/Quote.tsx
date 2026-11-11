@@ -2,6 +2,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { PhoneLink } from "@/components/analytics/PhoneLink";
 import { QuoteForm } from "@/components/forms/QuoteForm";
 import { Container } from "@/components/ui/Container";
+import { formatSiteAddress } from "@/lib/site";
 import { getRuntimeContacts } from "@/lib/store/settings";
 
 export async function Quote() {
@@ -59,7 +60,12 @@ export async function Quote() {
             </li>
             <li className="flex items-start gap-3 text-white/80">
               <MapPin className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
-              {contacts.serviceArea}
+              <span>
+                {formatSiteAddress(contacts.address)}
+                <span className="mt-1 block text-white/65">
+                  Serving {contacts.serviceArea}
+                </span>
+              </span>
             </li>
           </ul>
         </div>
