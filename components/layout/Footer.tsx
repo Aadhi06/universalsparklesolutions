@@ -140,14 +140,14 @@ export function Footer({ contacts = site }: { contacts?: PublicContacts }) {
             © {new Date().getFullYear()} {contacts.legalName}. All rights reserved.
           </p>
           <p className="text-white/55">
-            Website by{" "}
+            Web Designed & Developed By{" "}
             <a
               href="https://avenque.io"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white/70 transition-colors hover:text-gold"
             >
-              Avenque
+              Avenque Ltd
             </a>
           </p>
         </Container>
