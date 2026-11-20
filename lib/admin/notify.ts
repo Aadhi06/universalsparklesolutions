@@ -24,20 +24,14 @@ export async function notifyStaff(input: {
   url: string;
   email?: boolean;
 }) {
-  if (input.email !== false) {
-    try {
-      await sendAdminNotice(input);
-    } catch {
-      // A mail failure should not stop the push attempt.
-    }
-  }
-
-  try {
-    await sendPush(input);
-  } catch (error) {
-    // Push is best-effort; the caller's save has already happened.
-    console.error("push-send-failed", input.topic, error);
-  }
+  // Run together so a slow SMTP server cannot delay the push or let the
+  // serverless function end before it is sent.
+  const [mail, push] = await Promise.allSettled([
+    input.email === false ? Promise.resolve() : sendAdminNotice(input),
+    sendPush(input),
+  ]);
+  if (mail.status === "rejected") console.error("admin-mail-failed", input.topic, mail.reason);
+  if (push.status === "rejected") console.error("push-send-failed", input.topic, push.reason);
 }
 
 async function sendPush(input: { topic: Topic; title: string; body: string; url: string }) {
@@ -68,7 +62,7 @@ async function sendPush(input: { topic: Topic; title: string; body: string; url:
         await webpush.sendNotification(
           { endpoint: item.endpoint, keys: item.keys },
           payload,
-          { TTL: 24 * 60 * 60, urgency: "high" },
+          { TTL: 24 * 60 * 60, urgency: "high", timeout: 10_000 },
         );
       } catch (error) {
         const statusCode =

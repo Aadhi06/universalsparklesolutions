@@ -5,6 +5,7 @@ import {
   getEnquiry,
   getEnquiryByReplyToken,
   setEnquiryMessageEmailStatus,
+  type Enquiry,
   type EnquiryMessage,
 } from "@/lib/store/enquiries";
 
@@ -67,15 +68,31 @@ export async function addCustomerMessage(token: string, text: string) {
     text,
   });
   if (!saved) return null;
-  await notifyStaff({
-    topic: "enquiries",
-    title: `Reply from ${enquiry.fullName}`,
-    body: `${enquiry.phone} · ${text.slice(0, 140)}`,
-    url: `/admin/enquiries/${enquiry.id}/chat`,
-  });
+  await notifyCustomerReply(enquiry, text);
   const message = saved.messages?.at(-1);
   return {
     enquiryId: enquiry.id,
     message: message ? publicMessage(message) : null,
   };
+}
+
+function preview(text: string, max = 120) {
+  const plain = text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return plain.length > max ? `${plain.slice(0, max - 1).trimEnd()}…` : plain;
+}
+
+/** Push + email the staff for every customer chat message; never throws. */
+export async function notifyCustomerReply(enquiry: Enquiry, text: string) {
+  const name = enquiry.fullName.trim() || "a customer";
+  const context = [enquiry.service, enquiry.location].filter(Boolean).join(" · ");
+  try {
+    await notifyStaff({
+      topic: "enquiries",
+      title: `New reply from ${name}`,
+      body: context ? `${context}\n${preview(text)}` : preview(text),
+      url: `/admin/enquiries/${enquiry.id}/chat`,
+    });
+  } catch (error) {
+    console.error("customer-reply-notify-failed", enquiry.id, error);
+  }
 }

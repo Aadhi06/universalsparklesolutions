@@ -10,6 +10,7 @@ import {
 } from "@/lib/store/projects";
 import { formatVisit } from "@/lib/admin/format";
 import { notifyStaff } from "@/lib/admin/notify";
+import { notifyCustomerReply } from "@/lib/chat/messages";
 import {
   sendCustomerAppointmentEmail,
   sendStaffAppointmentEmail,
@@ -270,12 +271,7 @@ export async function replyToEnquiryAction(formData: FormData) {
   });
   if (!saved) redirect("/chat/unavailable");
 
-  await notifyStaff({
-    topic: "enquiries",
-    title: `Reply from ${enquiry.fullName}`,
-    body: `${enquiry.phone} · ${text.slice(0, 140)}`,
-    url: `/admin/enquiries/${enquiry.id}/chat`,
-  });
+  await notifyCustomerReply(enquiry, text);
 
   revalidatePath("/admin");
   revalidatePath("/admin/enquiries");

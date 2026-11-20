@@ -1,4 +1,4 @@
-const CACHE = "uss-admin-v2";
+const CACHE = "uss-admin-v3";
 const OFFLINE = "/admin/offline.html";
 
 self.addEventListener("install", (event) => {
@@ -60,9 +60,12 @@ self.addEventListener("notificationclick", (event) => {
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(async (windows) => {
       const open = windows.find((client) => new URL(client.url).pathname.startsWith("/admin"));
       if (open) {
-        await open.focus();
-        if ("navigate" in open) return open.navigate(url.href).catch(() => undefined);
-        return undefined;
+        await open.focus().catch(() => undefined);
+        if (open.url === url.href) return undefined;
+        // navigate() only works on windows this worker controls; fall back to openWindow.
+        const moved =
+          "navigate" in open ? await open.navigate(url.href).catch(() => null) : null;
+        if (moved) return undefined;
       }
       return self.clients.openWindow(url.href);
     }),
