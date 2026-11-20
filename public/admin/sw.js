@@ -56,5 +56,15 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   const url = new URL(event.notification.data?.url || "/admin/", self.location.origin);
-  event.waitUntil(self.clients.openWindow(url.href));
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(async (windows) => {
+      const open = windows.find((client) => new URL(client.url).pathname.startsWith("/admin"));
+      if (open) {
+        await open.focus();
+        if ("navigate" in open) return open.navigate(url.href).catch(() => undefined);
+        return undefined;
+      }
+      return self.clients.openWindow(url.href);
+    }),
+  );
 });

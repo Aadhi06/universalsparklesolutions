@@ -48,7 +48,19 @@ export async function getAdminServiceWorker() {
     });
   }
   await registration.update().catch(() => undefined);
+  // pushManager.subscribe fails until the worker has activated.
+  if (!registration.active) registration = await navigator.serviceWorker.ready;
   return registration;
+}
+
+export function isIosBrowserTab() {
+  const ios =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const standalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    ("standalone" in navigator && Boolean((navigator as { standalone?: boolean }).standalone));
+  return ios && !standalone;
 }
 
 export function urlBase64ToUint8Array(value: string) {

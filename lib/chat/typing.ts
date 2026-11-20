@@ -9,7 +9,7 @@ export async function markTyping(id: string, party: "customer" | "staff") {
   await updateJsonFile<TypingFile>(FILE, {}, (current) => ({
     ...current,
     [id]: { ...current[id], [party]: new Date().toISOString() },
-  }));
+  })).catch(() => undefined);
 }
 
 export async function readTyping(id: string) {

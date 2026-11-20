@@ -32,6 +32,15 @@ export async function notifyStaff(input: {
     }
   }
 
+  try {
+    await sendPush(input);
+  } catch (error) {
+    // Push is best-effort; the caller's save has already happened.
+    console.error("push-send-failed", input.topic, error);
+  }
+}
+
+async function sendPush(input: { topic: Topic; title: string; body: string; url: string }) {
   const publicKey = pushPublicKey();
   const privateKey = process.env.VAPID_PRIVATE_KEY?.trim() ?? "";
   if (!publicKey || !privateKey) return;
@@ -47,16 +56,19 @@ export async function notifyStaff(input: {
     input.topic === "enquiries" ? item.enquiries : item.appointments,
   );
 
+  const payload = JSON.stringify({
+    title: input.title,
+    body: input.body,
+    url: input.url,
+  });
+
   await Promise.all(
     subscriptions.map(async (item) => {
       try {
         await webpush.sendNotification(
           { endpoint: item.endpoint, keys: item.keys },
-          JSON.stringify({
-            title: input.title,
-            body: input.body,
-            url: input.url,
-          }),
+          payload,
+          { TTL: 24 * 60 * 60, urgency: "high" },
         );
       } catch (error) {
         const statusCode =
@@ -64,8 +76,10 @@ export async function notifyStaff(input: {
             ? Number(error.statusCode)
             : 0;
         if (statusCode === 404 || statusCode === 410) {
-          await deletePushSubscription(item.endpoint);
+          await deletePushSubscription(item.endpoint).catch(() => undefined);
+          return;
         }
+        console.error("push-send-failed", new URL(item.endpoint).host, statusCode, error);
       }
     }),
   );

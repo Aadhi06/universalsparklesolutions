@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   clearStoredPushFlags,
   getAdminServiceWorker,
+  isIosBrowserTab,
   readStoredPushFlags,
   urlBase64ToUint8Array,
   writeStoredPushFlags,
@@ -14,6 +15,7 @@ export function PushOptions() {
   const [flags, setFlags] = useState<PushFlags>({ enquiries: false, appointments: false });
   const [configured, setConfigured] = useState(true);
   const [supported, setSupported] = useState(true);
+  const [iosTab, setIosTab] = useState(false);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [ready, setReady] = useState(false);
@@ -27,8 +29,15 @@ export function PushOptions() {
         setFlags(stored);
       }
 
-      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-        if (!cancelled) setSupported(false);
+      if (
+        !("serviceWorker" in navigator) ||
+        !("PushManager" in window) ||
+        typeof Notification === "undefined"
+      ) {
+        if (!cancelled) {
+          setSupported(false);
+          setIosTab(isIosBrowserTab());
+        }
         return;
       }
 
@@ -48,33 +57,37 @@ export function PushOptions() {
       let subscription = await registration.pushManager.getSubscription();
       const match = data.subscriptions.find((item) => item.endpoint === subscription?.endpoint);
 
+      const granted = Notification.permission === "granted";
       let nextFlags: PushFlags = { enquiries: false, appointments: false };
-      if (match) {
+      if (match && granted) {
         nextFlags = { enquiries: match.enquiries, appointments: match.appointments };
-      } else if (stored && (stored.enquiries || stored.appointments)) {
+      } else if (stored && (stored.enquiries || stored.appointments) && granted) {
         nextFlags = stored;
+      }
+      if (Notification.permission === "denied" && !cancelled) {
+        setMessage(
+          "Notifications are blocked for USS Admin. Allow them in your phone or browser settings, then turn the switches on.",
+        );
       }
 
       // Keep server copy in sync whenever this device still wants alerts.
       if (data.configured && (nextFlags.enquiries || nextFlags.appointments)) {
-        if (Notification.permission === "granted") {
-          if (!subscription) {
-            subscription = await registration.pushManager.subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: urlBase64ToUint8Array(data.publicKey),
-            });
-          }
-          if (subscription) {
-            await fetch("/api/admin/push", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                subscription: subscription.toJSON(),
-                enquiries: nextFlags.enquiries,
-                appointments: nextFlags.appointments,
-              }),
-            });
-          }
+        if (!subscription) {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(data.publicKey),
+          });
+        }
+        if (subscription) {
+          await fetch("/api/admin/push", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              subscription: subscription.toJSON(),
+              enquiries: nextFlags.enquiries,
+              appointments: nextFlags.appointments,
+            }),
+          });
         }
       }
 
@@ -106,8 +119,26 @@ export function PushOptions() {
     writeStoredPushFlags(next);
 
     try {
-      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      if (
+        !("serviceWorker" in navigator) ||
+        !("PushManager" in window) ||
+        typeof Notification === "undefined"
+      ) {
         throw new Error("This browser cannot receive push notifications.");
+      }
+
+      const enabled = next.enquiries || next.appointments;
+
+      // Safari only shows the permission prompt while the tap is still being handled.
+      if (enabled && Notification.permission !== "granted") {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          throw new Error(
+            permission === "denied"
+              ? "Notifications are blocked for USS Admin. Allow them in your phone or browser settings, then try again."
+              : "Allow notifications for this site, then try again.",
+          );
+        }
       }
 
       const registration = await getAdminServiceWorker();
@@ -116,14 +147,6 @@ export function PushOptions() {
       }
 
       let subscription = await registration.pushManager.getSubscription();
-      const enabled = next.enquiries || next.appointments;
-
-      if (enabled && Notification.permission !== "granted") {
-        const permission = await Notification.requestPermission();
-        if (permission !== "granted") {
-          throw new Error("Allow notifications for this site, then try again.");
-        }
-      }
 
       if (enabled && !subscription) {
         const response = await fetch("/api/admin/push");
@@ -184,7 +207,9 @@ export function PushOptions() {
       </p>
       {!supported ? (
         <p className="mt-3 text-sm text-navy">
-          This browser cannot receive push notifications.
+          {iosTab
+            ? "On iPhone, tap Share then Add to Home Screen, open USS Admin from the home screen icon, and turn notifications on there."
+            : "This browser cannot receive push notifications."}
         </p>
       ) : !configured ? (
         <p className="mt-3 text-sm text-navy">

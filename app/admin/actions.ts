@@ -384,7 +384,16 @@ export async function bulkAppointmentAction(formData: FormData) {
     if (!appointmentStatuses.includes(status)) {
       throw new Error("Select a valid status.");
     }
-    await setAppointmentStatuses(ids, status);
+    const changed = await setAppointmentStatuses(ids, status);
+    if (changed > 0) {
+      await notifyStaff({
+        topic: "appointments",
+        title: changed === 1 ? "Appointment updated" : `${changed} appointments updated`,
+        body: `Status changed to ${status}`,
+        url: "/admin/appointments",
+        email: false,
+      });
+    }
   }
 
   revalidatePath("/admin");

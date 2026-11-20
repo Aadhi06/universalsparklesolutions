@@ -93,14 +93,15 @@ export async function updateJsonFile<T>(
   update: (current: T) => T | Promise<T>,
 ) {
   return enqueue(async () => {
-    let current = fallback;
+    let current: T;
     try {
       current = blobEnabled()
         ? await readBlobJson(filename, fallback)
         : await readLocalJson(filename, fallback);
     } catch (error) {
+      // Writing the fallback here would wipe the stored file on a transient read error.
       console.error("store-read-failed", filename, error);
-      current = fallback;
+      throw error;
     }
     const next = await update(current);
     if (blobEnabled()) await writeBlobJson(filename, next);
