@@ -247,7 +247,9 @@ export async function resendEnquiryChatAction(formData: FormData) {
     throw new Error("Message not found.");
   }
 
-  const emailStatus = await sendEnquiryReplyEmail(enquiry, message.text);
+  const emailStatus = await sendEnquiryReplyEmail(enquiry, message.text, {
+    imageCount: message.images?.length ?? 0,
+  });
   await setEnquiryMessageEmailStatus(id, messageId, emailStatus);
   revalidatePath(`/admin/enquiries/${id}/chat`);
   revalidatePath(`/chat/${enquiry.replyToken}`);

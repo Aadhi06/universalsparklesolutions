@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LiveChat } from "@/components/chat/LiveChat";
+import { publicMessage } from "@/lib/chat/messages";
 import { site } from "@/lib/site";
 import { getEnquiryByReplyToken } from "@/lib/store/enquiries";
 
@@ -52,7 +53,9 @@ export default async function CustomerChatPage({
             text: enquiry.message,
             at: enquiry.receivedAt,
           }}
-          initialMessages={enquiry.messages ?? []}
+          initialMessages={(enquiry.messages ?? []).map((message) =>
+            publicMessage(message, `/api/chat/${enquiry.replyToken}/media`),
+          )}
           pollUrl={`/api/chat/${enquiry.replyToken}`}
           postUrl={`/api/chat/${enquiry.replyToken}`}
         />

@@ -6,6 +6,7 @@ import { CopyLink } from "@/components/chat/CopyLink";
 import { LiveChat } from "@/components/chat/LiveChat";
 import { appOrigin } from "@/lib/admin/origin";
 import { formatDateTime, telHref } from "@/lib/admin/format";
+import { publicMessage } from "@/lib/chat/messages";
 import { mailConfigured } from "@/lib/email/sendEnquiryReply";
 import { ensureReplyToken } from "@/lib/store/enquiries";
 
@@ -81,7 +82,9 @@ export default async function EnquiryChatPage({
             text: enquiry.message,
             at: enquiry.receivedAt,
           }}
-          initialMessages={enquiry.messages ?? []}
+          initialMessages={(enquiry.messages ?? []).map((message) =>
+            publicMessage(message, `/api/admin/enquiries/${enquiry.id}/chat/media`),
+          )}
           pollUrl={`/api/admin/enquiries/${enquiry.id}/chat`}
           postUrl={`/api/admin/enquiries/${enquiry.id}/chat`}
         />

@@ -11,11 +11,22 @@ export type EnquiryNote = {
   text: string;
 };
 
+export type EnquiryMessageImage = {
+  id: string;
+  pathname: string;
+  contentType: string;
+  size: number;
+  name?: string;
+  width?: number;
+  height?: number;
+};
+
 export type EnquiryMessage = {
   id: string;
   at: string;
   from: "staff" | "customer";
   text: string;
+  images?: EnquiryMessageImage[];
   emailStatus?: "sent" | "not_configured" | "failed";
 };
 
